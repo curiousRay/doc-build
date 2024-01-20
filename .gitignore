@@ -1,3 +1,6 @@
 *.pdf
+!logo.pdf
+!background.pdf
+
 *.md
 !README.md
