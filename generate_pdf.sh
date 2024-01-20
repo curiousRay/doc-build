@@ -7,6 +7,8 @@ sudo docker run --rm \
        	--user $(id -u):$(id -g) \
        	nightkeeper:v1 test.md -o test.pdf --template eisvogel \
        	--listings \
+        --pdf-engine "xelatex" \
+    -V CJKmainfont="WenQuanYi Micro Hei" \
 	-V titlepage="true" \
     -V titlepage-text-color="FFFFFF" \
     -V titlepage-rule-color="360049" \
