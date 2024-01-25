@@ -25,4 +25,5 @@ sudo docker run --rm \
     -V geometry:top="2.5cm" \
     -V geometry:bottom="2.5cm" \
     -V geometry:left="1.5cm" \
-    -V geometry:right="1.5cm"
+    -V geometry:right="1.5cm" \
+    -V colorlinks="true"
