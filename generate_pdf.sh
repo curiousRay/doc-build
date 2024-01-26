@@ -9,6 +9,7 @@ sudo docker run --rm \
         --toc \
        	--listings \
         --pdf-engine "xelatex" \
+    -V lang="zh-CN" \
     -V CJKmainfont="Source Han Sans SC" \
 	-V titlepage="true" \
     -V titlepage-text-color="FFFFFF" \
@@ -27,3 +28,4 @@ sudo docker run --rm \
     -V geometry:left="1.5cm" \
     -V geometry:right="1.5cm" \
     -V colorlinks="true"
+
