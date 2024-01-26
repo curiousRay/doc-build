@@ -910,6 +910,54 @@ $endif$
 %% end added
 %%
 
+
+%% lihao: add default multi-lang TOC title, using BCP 47 language code
+%% reference: https://tex.stackexchange.com/questions/195491/ifthenelse-equal-string-comparison-fails/610748#610748
+\usepackage{indentfirst}
+\newcommand{\manuallang}{$lang$}
+\ifdefstring{\manuallang}{zh-CN}
+{
+  \renewcommand{\figurename}{图}
+  \renewcommand{\tablename}{表}
+  \renewcommand{\contentsname}{目录}
+  \setlength{\parindent}{1.6em} %% Chinese indent 2 characters
+}
+{
+  \ifdefstring{\manuallang}{zh-TW}
+  {
+    \renewcommand{\figurename}{圖}
+    \renewcommand{\tablename}{表}
+    \renewcommand{\contentsname}{目錄}
+    \setlength{\parindent}{1.6em} %% Chinese indent 2 characters
+  }
+  {
+    \ifdefstring{\manuallang}{ja}
+    {
+      \renewcommand{\figurename}{図}
+      \renewcommand{\tablename}{表}
+      \renewcommand{\contentsname}{目録}
+      \setlength{\parindent}{0.8em} %% Japanese indent 1 character
+    }
+    {
+      \ifdefstring{\manuallang}{kr}
+      {
+        \renewcommand{\figurename}{그림}
+        \renewcommand{\tablename}{형}
+        \renewcommand{\contentsname}{목록}
+        \setlength{\parindent}{0.8em} %% Korean indent 1 character
+      }
+      {
+        %% fallback to english
+        \renewcommand{\figurename}{Figure}
+        \renewcommand{\tablename}{Table}
+        \renewcommand{\figurename}{Table of Contents}
+        \setlength{\parindent}{0em} %% English no indent
+      }
+    }
+  }
+}
+
+
 \begin{document}
 %%
 %% begin titlepage
@@ -1019,48 +1067,6 @@ $if(toc)$
 $if(toc-title)$
 \renewcommand*\contentsname{$toc-title$}
 $endif$
-
-
-%% lihao: add default multi-lang TOC title, using BCP 47 language code
-%% reference: https://tex.stackexchange.com/questions/195491/ifthenelse-equal-string-comparison-fails/610748#610748
-\newcommand{\manuallang}{$lang$}
-\ifdefstring{\manuallang}{zh-CN}
-{
-  \renewcommand{\figurename}{图}
-  \renewcommand{\tablename}{表}
-  \renewcommand{\contentsname}{目录}
-}
-{
-  \ifdefstring{\manuallang}{zh-TW}
-  {
-    \renewcommand{\figurename}{圖}
-    \renewcommand{\tablename}{表}
-    \renewcommand{\contentsname}{目錄}
-  }
-  {
-    \ifdefstring{\manuallang}{ja}
-    {
-      \renewcommand{\figurename}{図}
-      \renewcommand{\tablename}{表}
-      \renewcommand{\contentsname}{目録}
-    }
-    {
-      \ifdefstring{\manuallang}{kr}
-      {
-        \renewcommand{\figurename}{그림}
-        \renewcommand{\tablename}{형}
-        \renewcommand{\contentsname}{목록}
-      }
-      {
-        %% fallback to english
-        \renewcommand{\figurename}{Figure}
-        \renewcommand{\tablename}{Table}
-        \renewcommand{\figurename}{Table of Contents}
-      }
-    }
-  }
-}
-
 
 $if(beamer)$
 \begin{frame}[allowframebreaks]
