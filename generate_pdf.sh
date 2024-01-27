@@ -5,7 +5,7 @@ set -e
 sudo docker run --rm \
        	--volume "$(pwd):/data" \
        	--user $(id -u):$(id -g) \
-       	nightkeeper:v1 test.md -o test.pdf --template eisvogel \
+       	nightkeeper:v1 test.md -o test.pdf --template eisvogel.tex \
         --toc \
        	--listings \
         --pdf-engine "xelatex" \

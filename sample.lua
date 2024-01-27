@@ -3,7 +3,7 @@
 words = 0
 characters = 0
 characters_and_spaces = 0
-process_anyway = false
+process_anyway = true
 
 wordcount = {
   Str = function(el)
