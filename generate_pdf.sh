@@ -9,6 +9,7 @@ sudo docker run --rm \
         --toc \
        	--listings \
         --pdf-engine "xelatex" \
+        --lua-filter "./sample.lua" \
     -V lang="zh-CN" \
     -V CJKmainfont="Source Han Sans SC" \
 	-V titlepage="true" \
