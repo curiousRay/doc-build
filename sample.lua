@@ -20,6 +20,10 @@ wordcount = {
   end,
 
   Code = function(el)
+  
+    -- 此处可以遍历所有inlinecode
+    print(el)
+
     _,n = el.text:gsub("%S+","")
     words = words + n
     text_nospace = el.text:gsub("%s", "")
@@ -45,6 +49,7 @@ function Meta(meta)
 end
 
 function Pandoc(el)
+
     -- skip metadata, just count body:
     pandoc.walk_block(pandoc.Div(el.blocks), wordcount)
     print(words .. " words in body")
