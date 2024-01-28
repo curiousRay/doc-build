@@ -11,6 +11,7 @@ sudo docker run --rm \
         --pdf-engine "xelatex" \
         --lua-filter "./sample.lua" \
         --number-sections \
+        --filter pandoc-latex-environment \
     -V lang="zh-CN" \
     -V CJKmainfont="Source Han Sans SC" \
 	-V titlepage="true" \
