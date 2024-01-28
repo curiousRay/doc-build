@@ -972,8 +972,29 @@ $endif$
 % \usepackage{xcolor}
 \let\oldquote=\quote
 \let\endoldquote=\endquote
+
+\newtoggle{containsWarning}
+\togglefalse{containsWarning}
+\newcommand{\checkForWarning}[1]{
+  \ifstrequal{#1}{warning}{\toggletrue{containsWarning}} % may change into instring
+}
+
 %\renewenvironment{quote}{\begin{error-box}\begin{oldquote}}{\end{oldquote}\end{error-box}}
-\renewenvironment{quote}{\begin{error-box}}{\end{error-box}}
+\renewenvironment{quote}{
+  \global\togglefalse{containsWarning}
+  \checkForWarning{\quotecontents} % change the \quotecontents placeholder 
+  \iftoggle{containsWarning}{
+    \begin{error-box}
+  }{\begin{oldquote}}
+  }{
+  \checkForWarning{\quotecontents} % change the \quotecontents placeholder 
+  \iftoggle{containsWarning}{
+    \end{error-box}
+  }{\end{oldquote}}
+  }
+
+
+
 
 \begin{document}
 %%
