@@ -980,18 +980,18 @@ $endif$
 }
 
 %\renewenvironment{quote}{\begin{error-box}\begin{oldquote}}{\end{oldquote}\end{error-box}}
-\renewenvironment{quote}{
-  \global\togglefalse{containsWarning}
-  \checkForWarning{\quotecontents} % change the \quotecontents placeholder 
-  \iftoggle{containsWarning}{
-    \begin{error-box}
-  }{\begin{oldquote}}
-  }{
-  \checkForWarning{\quotecontents} % change the \quotecontents placeholder 
-  \iftoggle{containsWarning}{
-    \end{error-box}
-  }{\end{oldquote}}
-  }
+%\renewenvironment{quote}{
+%  \global\togglefalse{containsWarning}
+%  \checkForWarning{\quotecontents} % change the \quotecontents placeholder 
+%  \iftoggle{containsWarning}{
+%    \begin{error-box}
+%  }{\begin{oldquote}}
+%  }{
+%  \checkForWarning{\quotecontents} % change the \quotecontents placeholder 
+%  \iftoggle{containsWarning}{
+%    \end{error-box}
+%  }{\end{oldquote}}
+%  }
 
 
 

@@ -3,7 +3,7 @@
 words = 0
 characters = 0
 characters_and_spaces = 0
-process_anyway = true
+process_anyway = false
 
 wordcount = {
   Str = function(el)
@@ -22,7 +22,7 @@ wordcount = {
   Code = function(el)
   
     -- 此处可以遍历所有inlinecode
-    print(el)
+    -- print(el)
 
     _,n = el.text:gsub("%S+","")
     words = words + n
@@ -37,6 +37,21 @@ wordcount = {
     text_nospace = el.text:gsub("%s", "")
     characters = characters + utf8.len(text_nospace)
     characters_and_spaces = characters_and_spaces + utf8.len(el.text)
+  end,
+
+  BlockQuote = function(el)
+    -- print(el.c[1].c[1]) -- 获取quote的开头部分
+
+    -- github旧风格
+    if (el.c[1].c[1].t == "Strong") and (el.c[1].c[1].c[1].text == "注意：") then
+        print("bingo")
+    end
+
+    -- github新风格
+    if (el.c[1].c[1].text == "[!NOTE]") then
+      print("bingo again")
+    end
+
   end
 }
 
@@ -52,9 +67,11 @@ function Pandoc(el)
 
     -- skip metadata, just count body:
     pandoc.walk_block(pandoc.Div(el.blocks), wordcount)
-    print(words .. " words in body")
-    print(characters .. " characters in body")
-    print(characters_and_spaces .. " characters in body (including spaces)")
+    -- print(words .. " words in body")
+    -- print(characters .. " characters in body")
+    -- print(characters_and_spaces .. " characters in body (including spaces)")
+    
+    
     if not process_anyway then
       os.exit(0)
     end
