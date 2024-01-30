@@ -1,0 +1,1013 @@
+%%
+% Copyright (c) 2017 - 2023, Pascal Wagler;
+% Copyright (c) 2014 - 2023, John MacFarlane
+%
+% All rights reserved.
+%
+% Redistribution and use in source and binary forms, with or without
+% modification, are permitted provided that the following conditions
+% are met:
+%
+% - Redistributions of source code must retain the above copyright
+% notice, this list of conditions and the following disclaimer.
+%
+% - Redistributions in binary form must reproduce the above copyright
+% notice, this list of conditions and the following disclaimer in the
+% documentation and/or other materials provided with the distribution.
+%
+% - Neither the name of John MacFarlane nor the names of other
+% contributors may be used to endorse or promote products derived
+% from this software without specific prior written permission.
+%
+% THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+% "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+% LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+% FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+% COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+% INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+% BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+% LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+% CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+% LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+% ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+% POSSIBILITY OF SUCH DAMAGE.
+%%
+
+%%
+% This is the Eisvogel pandoc LaTeX template.
+%
+% For usage information and examples visit the official GitHub page:
+% https://github.com/Wandmalfarbe/pandoc-latex-template
+%%
+
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames,x11names,table}{xcolor}
+\PassOptionsToPackage{space}{xeCJK}
+%
+\documentclass[
+  paper=a4,
+  ,captions=tableheading
+]{scrartcl}
+\usepackage{amsmath,amssymb}
+% Use setspace anyway because we change the default line spacing.
+% The spacing is changed early to affect the titlepage and the TOC.
+\usepackage{setspace}
+\setstretch{1.2}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+  \ifXeTeX
+    \usepackage{xeCJK}
+    \setCJKmainfont[]{Source Han Sans SC}
+          \fi
+  \ifLuaTeX
+    \usepackage[]{luatexja-fontspec}
+    \setmainjfont[]{Source Han Sans SC}
+  \fi
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\definecolor{default-linkcolor}{HTML}{A50000}
+\definecolor{default-filecolor}{HTML}{A50000}
+\definecolor{default-citecolor}{HTML}{4077C0}
+\definecolor{default-urlcolor}{HTML}{4077C0}
+
+\usepackage[top=2.5cm,bottom=2.5cm,left=1.5cm,right=1.5cm]{geometry}
+\usepackage[export]{adjustbox}
+\usepackage{graphicx}
+\usepackage{listings}
+\newcommand{\passthrough}[1]{#1}
+\lstset{defaultdialect=[5.3]Lua}
+\lstset{defaultdialect=[x86masm]Assembler}
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+% add backlinks to footnote references, cf. https://tex.stackexchange.com/questions/302266/make-footnote-clickable-both-ways
+\usepackage{footnotebackref}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+% Make use of float-package and set default placement for figures to H.
+% The option H means 'PUT IT HERE' (as  opposed to the standard h option which means 'You may put it here if you like').
+\usepackage{float}
+\floatplacement{figure}{H}
+\makeatother
+\ifLuaTeX
+  \usepackage{luacolor}
+  \usepackage[soul]{lua-ul}
+\else
+\usepackage{soul}
+  \ifXeTeX
+    % soul's \st doesn't work for CJK:
+    \usepackage{xeCJKfntef}
+    \renewcommand{\st}[1]{\sout{#1}}
+  \fi
+\fi
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{5}
+\ifLuaTeX
+\usepackage[bidi=basic]{babel}
+\else
+\usepackage[bidi=default]{babel}
+\fi
+% get rid of language-specific shorthands (see #6817):
+\let\LanguageShortHands\languageshorthands
+\def\languageshorthands#1{}
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage[open=true]{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Instruction For Use},
+  pdfauthor={lihao.lei},
+  pdflang={zh-CN},
+  colorlinks=true,
+  linkcolor={default-linkcolor},
+  filecolor={default-filecolor},
+  citecolor={default-citecolor},
+  urlcolor={default-urlcolor},
+  bookmarksnumbered,
+  breaklinks=true,
+  pdfcreator={LaTeX via pandoc with the Eisvogel template}}
+\title{Demo Book Title标题}
+\usepackage{etoolbox}
+\makeatletter
+\providecommand{\subtitle}[1]{% add subtitle to \maketitle
+  \apptocmd{\@title}{\par {\large #1 \par}}{}{}
+}
+\makeatother
+\subtitle{This is the demo subtitle副标题}
+\author{lihao.lei}
+\date{80000000-ETD-ENG-01-20240121}
+
+
+
+%%
+%% added
+%%
+
+
+%
+% for the background color of the title page
+%
+\usepackage{pagecolor}
+\usepackage{afterpage}
+\usepackage{tikz}
+
+%
+% break urls
+%
+\PassOptionsToPackage{hyphens}{url}
+
+%
+% When using babel or polyglossia with biblatex, loading csquotes is recommended
+% to ensure that quoted texts are typeset according to the rules of your main language.
+%
+\usepackage{csquotes}
+
+%
+% captions
+%
+\definecolor{caption-color}{HTML}{777777}
+\usepackage[font={stretch=1.2}, textfont={color=caption-color}, position=top, skip=4mm, labelfont=bf, singlelinecheck=false, justification=raggedright]{caption}
+\setcapindent{0em}
+
+%
+% blockquote
+%
+\definecolor{blockquote-border}{RGB}{221,221,221}
+\definecolor{blockquote-text}{RGB}{119,119,119}
+\usepackage{mdframed}
+\newmdenv[rightline=false,bottomline=false,topline=false,linewidth=3pt,linecolor=blockquote-border,skipabove=\parskip]{customblockquote}
+\renewenvironment{quote}{\begin{customblockquote}\list{}{\rightmargin=0em\leftmargin=0em}%
+\item\relax\color{blockquote-text}\ignorespaces}{\unskip\unskip\endlist\end{customblockquote}}
+
+%
+% Source Sans Pro as the default font family
+% Source Code Pro for monospace text
+%
+% 'default' option sets the default
+% font family to Source Sans Pro, not \sfdefault.
+%
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+    \usepackage[default]{sourcesanspro}
+  \usepackage{sourcecodepro}
+  \else % if not pdftex
+    \usepackage[default]{sourcesanspro}
+  \usepackage{sourcecodepro}
+
+  % XeLaTeX specific adjustments for straight quotes: https://tex.stackexchange.com/a/354887
+  % This issue is already fixed (see https://github.com/silkeh/latex-sourcecodepro/pull/5) but the
+  % fix is still unreleased.
+  % TODO: Remove this workaround when the new version of sourcecodepro is released on CTAN.
+  \ifxetex
+    \makeatletter
+    \defaultfontfeatures[\ttfamily]
+      { Numbers   = \sourcecodepro@figurestyle,
+        Scale     = \SourceCodePro@scale,
+        Extension = .otf }
+    \setmonofont
+      [ UprightFont    = *-\sourcecodepro@regstyle,
+        ItalicFont     = *-\sourcecodepro@regstyle It,
+        BoldFont       = *-\sourcecodepro@boldstyle,
+        BoldItalicFont = *-\sourcecodepro@boldstyle It ]
+      {SourceCodePro}
+    \makeatother
+  \fi
+  \fi
+
+%
+% heading color
+%
+\definecolor{heading-color}{RGB}{40,40,40}
+\addtokomafont{section}{\color{heading-color}}
+% When using the classes report, scrreprt, book,
+% scrbook or memoir, uncomment the following line.
+%\addtokomafont{chapter}{\color{heading-color}}
+
+%
+% variables for title, author and date
+%
+\usepackage{titling}
+\title{Demo Book Title标题}
+\author{lihao.lei}
+\date{80000000-ETD-ENG-01-20240121}
+
+%
+% tables
+%
+
+\definecolor{table-row-color}{HTML}{F5F5F5}
+\definecolor{table-rule-color}{HTML}{999999}
+
+%\arrayrulecolor{black!40}
+\arrayrulecolor{table-rule-color}     % color of \toprule, \midrule, \bottomrule
+\setlength\heavyrulewidth{0.3ex}      % thickness of \toprule, \bottomrule
+\renewcommand{\arraystretch}{1.3}     % spacing (padding)
+
+
+%
+% remove paragraph indentation
+%
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+
+%
+%
+% Listings
+%
+%
+
+
+%
+% general listing colors
+%
+\definecolor{listing-background}{HTML}{F7F7F7}
+\definecolor{listing-rule}{HTML}{B3B2B3}
+\definecolor{listing-numbers}{HTML}{B3B2B3}
+\definecolor{listing-text-color}{HTML}{000000}
+\definecolor{listing-keyword}{HTML}{435489}
+\definecolor{listing-keyword-2}{HTML}{1284CA} % additional keywords
+\definecolor{listing-keyword-3}{HTML}{9137CB} % additional keywords
+\definecolor{listing-identifier}{HTML}{435489}
+\definecolor{listing-string}{HTML}{00999A}
+\definecolor{listing-comment}{HTML}{8E8E8E}
+
+\lstdefinestyle{eisvogel_listing_style}{
+  language         = java,
+  numbers          = left,
+  xleftmargin      = 2.7em,
+  framexleftmargin = 2.5em,
+  backgroundcolor  = \color{listing-background},
+  basicstyle       = \color{listing-text-color}\linespread{1.0}%
+                      \lst@ifdisplaystyle%
+                      \small%
+                      \fi\ttfamily{},
+  breaklines       = true,
+  frame            = single,
+  framesep         = 0.19em,
+  rulecolor        = \color{listing-rule},
+  frameround       = ffff,
+  tabsize          = 4,
+  numberstyle      = \color{listing-numbers},
+  aboveskip        = 1.0em,
+  belowskip        = 0.1em,
+  abovecaptionskip = 0em,
+  belowcaptionskip = 1.0em,
+  keywordstyle     = {\color{listing-keyword}\bfseries},
+  keywordstyle     = {[2]\color{listing-keyword-2}\bfseries},
+  keywordstyle     = {[3]\color{listing-keyword-3}\bfseries\itshape},
+  sensitive        = true,
+  identifierstyle  = \color{listing-identifier},
+  commentstyle     = \color{listing-comment},
+  stringstyle      = \color{listing-string},
+  showstringspaces = false,
+  escapeinside     = {/*@}{@*/}, % Allow LaTeX inside these special comments
+  literate         =
+  {á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1
+  {Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ú}{{\'U}}1
+  {à}{{\`a}}1 {è}{{\`e}}1 {ì}{{\`i}}1 {ò}{{\`o}}1 {ù}{{\`u}}1
+  {À}{{\`A}}1 {È}{{\`E}}1 {Ì}{{\`I}}1 {Ò}{{\`O}}1 {Ù}{{\`U}}1
+  {ä}{{\"a}}1 {ë}{{\"e}}1 {ï}{{\"i}}1 {ö}{{\"o}}1 {ü}{{\"u}}1
+  {Ä}{{\"A}}1 {Ë}{{\"E}}1 {Ï}{{\"I}}1 {Ö}{{\"O}}1 {Ü}{{\"U}}1
+  {â}{{\^a}}1 {ê}{{\^e}}1 {î}{{\^i}}1 {ô}{{\^o}}1 {û}{{\^u}}1
+  {Â}{{\^A}}1 {Ê}{{\^E}}1 {Î}{{\^I}}1 {Ô}{{\^O}}1 {Û}{{\^U}}1
+  {œ}{{\oe}}1 {Œ}{{\OE}}1 {æ}{{\ae}}1 {Æ}{{\AE}}1 {ß}{{\ss}}1
+  {ç}{{\c c}}1 {Ç}{{\c C}}1 {ø}{{\o}}1 {å}{{\r a}}1 {Å}{{\r A}}1
+  {€}{{\EUR}}1 {£}{{\pounds}}1 {«}{{\guillemotleft}}1
+  {»}{{\guillemotright}}1 {ñ}{{\~n}}1 {Ñ}{{\~N}}1 {¿}{{?`}}1
+  {…}{{\ldots}}1 {≥}{{>=}}1 {≤}{{<=}}1 {„}{{\glqq}}1 {“}{{\grqq}}1
+  {”}{{''}}1
+}
+\lstset{style=eisvogel_listing_style}
+
+%
+% Java (Java SE 12, 2019-06-22)
+%
+\lstdefinelanguage{Java}{
+  morekeywords={
+    % normal keywords (without data types)
+    abstract,assert,break,case,catch,class,continue,default,
+    do,else,enum,exports,extends,final,finally,for,if,implements,
+    import,instanceof,interface,module,native,new,package,private,
+    protected,public,requires,return,static,strictfp,super,switch,
+    synchronized,this,throw,throws,transient,try,volatile,while,
+    % var is an identifier
+    var
+  },
+  morekeywords={[2] % data types
+    % primitive data types
+    boolean,byte,char,double,float,int,long,short,
+    % String
+    String,
+    % primitive wrapper types
+    Boolean,Byte,Character,Double,Float,Integer,Long,Short
+    % number types
+    Number,AtomicInteger,AtomicLong,BigDecimal,BigInteger,DoubleAccumulator,DoubleAdder,LongAccumulator,LongAdder,Short,
+    % other
+    Object,Void,void
+  },
+  morekeywords={[3] % literals
+    % reserved words for literal values
+    null,true,false,
+  },
+  sensitive,
+  morecomment  = [l]//,
+  morecomment  = [s]{/*}{*/},
+  morecomment  = [s]{/**}{*/},
+  morestring   = [b]",
+  morestring   = [b]',
+}
+
+\lstdefinelanguage{XML}{
+  morestring      = [b]",
+  moredelim       = [s][\bfseries\color{listing-keyword}]{<}{\ },
+  moredelim       = [s][\bfseries\color{listing-keyword}]{</}{>},
+  moredelim       = [l][\bfseries\color{listing-keyword}]{/>},
+  moredelim       = [l][\bfseries\color{listing-keyword}]{>},
+  morecomment     = [s]{<?}{?>},
+  morecomment     = [s]{<!--}{-->},
+  commentstyle    = \color{listing-comment},
+  stringstyle     = \color{listing-string},
+  identifierstyle = \color{listing-identifier}
+}
+
+%
+% header and footer
+%
+\usepackage[headsepline,footsepline]{scrlayer-scrpage}
+
+\newpairofpagestyles{eisvogel-header-footer}{
+  \clearpairofpagestyles
+  \ihead*{Demo Book Title标题}
+  \chead*{}
+  \ohead*{80000000-ETD-ENG-01-20240121}
+  \ifoot*{lihao.lei}
+  \cfoot*{}
+  \ofoot*{\thepage}
+  \addtokomafont{pageheadfoot}{\upshape}
+}
+\pagestyle{eisvogel-header-footer}
+
+
+
+%%
+%% end added
+%%
+
+
+%% lihao: add default multi-lang TOC title, using BCP 47 language code
+%% reference: https://tex.stackexchange.com/questions/195491/ifthenelse-equal-string-comparison-fails/610748#610748
+\usepackage{indentfirst}
+\newcommand{\manuallang}{zh-CN}
+\ifdefstring{\manuallang}{zh-CN}
+{
+  \renewcommand{\figurename}{图}
+  \renewcommand{\tablename}{表}
+  \renewcommand{\contentsname}{目录}
+  \setlength{\parindent}{1.6em} %% Chinese indent 2 characters
+}
+{
+  \ifdefstring{\manuallang}{zh-TW}
+  {
+    \renewcommand{\figurename}{圖}
+    \renewcommand{\tablename}{表}
+    \renewcommand{\contentsname}{目錄}
+    \setlength{\parindent}{1.6em} %% Chinese indent 2 characters
+  }
+  {
+    \ifdefstring{\manuallang}{ja}
+    {
+      \renewcommand{\figurename}{図}
+      \renewcommand{\tablename}{表}
+      \renewcommand{\contentsname}{目録}
+      \setlength{\parindent}{0.8em} %% Japanese indent 1 character
+    }
+    {
+      \ifdefstring{\manuallang}{kr}
+      {
+        \renewcommand{\figurename}{그림}
+        \renewcommand{\tablename}{형}
+        \renewcommand{\contentsname}{목록}
+        \setlength{\parindent}{0.8em} %% Korean indent 1 character
+      }
+      {
+        %% fallback to english
+        \renewcommand{\figurename}{Figure}
+        \renewcommand{\tablename}{Table}
+        \renewcommand{\figurename}{Table of Contents}
+        \setlength{\parindent}{0em} %% English no indent
+      }
+    }
+  }
+}
+
+\usepackage{tcolorbox}
+
+\newtcolorbox{info-box}{colback=cyan!5!white,arc=0pt,outer arc=0pt,colframe=cyan!60!black}
+\newtcolorbox{warning-box}{colback=orange!5!white,arc=0pt,outer arc=0pt,colframe=orange!80!black}
+\newtcolorbox{error-box}{colback=red!5!white,arc=0pt,outer arc=0pt,colframe=red!75!black}
+
+
+% quote style
+% http://tex.stackexchange.com/questions/179982/add-a-black-border-to-block-quotations
+\usepackage{framed}
+% \usepackage{xcolor}
+\let\oldquote=\quote
+\let\endoldquote=\endquote
+
+\newtoggle{containsWarning}
+\togglefalse{containsWarning}
+\newcommand{\checkForWarning}[1]{
+  \ifstrequal{#1}{warning}{\toggletrue{containsWarning}} % may change into instring
+}
+
+%\renewenvironment{quote}{\begin{error-box}\begin{oldquote}}{\end{oldquote}\end{error-box}}
+%\renewenvironment{quote}{
+%  \global\togglefalse{containsWarning}
+%  \checkForWarning{\quotecontents} % change the \quotecontents placeholder 
+%  \iftoggle{containsWarning}{
+%    \begin{error-box}
+%  }{\begin{oldquote}}
+%  }{
+%  \checkForWarning{\quotecontents} % change the \quotecontents placeholder 
+%  \iftoggle{containsWarning}{
+%    \end{error-box}
+%  }{\end{oldquote}}
+%  }
+
+
+
+
+\begin{document}
+%%
+%% begin titlepage
+%%
+\begin{titlepage}
+\newgeometry{top=2cm, right=4cm, bottom=3cm, left=4cm}
+\tikz[remember picture,overlay] \node[inner sep=0pt] at (current page.center){\includegraphics[width=\paperwidth,height=\paperheight]{background.pdf}};
+\newcommand{\colorRule}[3][black]{\textcolor[HTML]{#1}{\rule{#2}{#3}}}
+\begin{flushleft}
+\noindent
+\\[-1em]
+\color[HTML]{FFFFFF}
+\makebox[0pt][l]{\colorRule[360049]{1.3\textwidth}{0pt}}
+\par
+\noindent
+
+% The titlepage with a background image has other text spacing and text size
+{
+  \setstretch{2}
+  \vfill
+  \vskip -8em
+  \noindent {\huge \textbf{\textsf{Demo Book Title标题}}}
+    \vskip 1em
+  {\Large \textsf{This is the demo subtitle副标题}}
+    \vskip 2em
+  \noindent {\Large \textsf{lihao.lei} \vskip 0.6em \textsf{80000000-ETD-ENG-01-20240121}}
+  \vfill
+}
+
+\noindent
+\includegraphics[width=30mm, left]{logo.pdf}
+
+\end{flushleft}
+\end{titlepage}
+\restoregeometry
+\pagenumbering{arabic}
+
+%%
+%% end titlepage
+%%
+
+% \maketitle
+
+
+
+{
+\hypersetup{linkcolor=}
+\setcounter{tocdepth}{3}
+\tableofcontents
+
+
+%% lihao: fix toc page-numbering
+%% Reference: https://blog.csdn.net/z_feng12489/article/details/90178479
+\thispagestyle{empty}
+\newpage
+\setcounter{page}{1}
+}
+
+\hypertarget{h1-headingux4f1aux6703uxc0dduxd65cuxc744ux4ed6ux306fux30ecux30a3ux30fcux30d6ux3068}{%
+\section{h1
+Heading会會생활을他はレィーブと}\label{h1-headingux4f1aux6703uxc0dduxd65cuxc744ux4ed6ux306fux30ecux30a3ux30fcux30d6ux3068}}
+
+\hypertarget{h2-headingux4f1aux6703uxc0dduxd65cuxc744ux4ed6ux306fux30ecux30a3ux30fcux30d6ux3068}{%
+\subsection{h2
+Heading会會생활을他はレィーブと}\label{h2-headingux4f1aux6703uxc0dduxd65cuxc744ux4ed6ux306fux30ecux30a3ux30fcux30d6ux3068}}
+
+\hypertarget{h3-headingux4f1aux6703uxc0dduxd65cuxc744ux4ed6ux306fux30ecux30a3ux30fcux30d6ux3068}{%
+\subsubsection{h3
+Heading会會생활을他はレィーブと}\label{h3-headingux4f1aux6703uxc0dduxd65cuxc744ux4ed6ux306fux30ecux30a3ux30fcux30d6ux3068}}
+
+\hypertarget{h4-headingux4f1aux6703uxc0dduxd65cuxc744ux4ed6ux306fux30ecux30a3ux30fcux30d6ux3068}{%
+\paragraph{h4
+Heading会會생활을他はレィーブと}\label{h4-headingux4f1aux6703uxc0dduxd65cuxc744ux4ed6ux306fux30ecux30a3ux30fcux30d6ux3068}}
+
+\hypertarget{h5-headingux4f1aux6703uxc0dduxd65cuxc744ux4ed6ux306fux30ecux30a3ux30fcux30d6ux3068}{%
+\subparagraph{h5
+Heading会會생활을他はレィーブと}\label{h5-headingux4f1aux6703uxc0dduxd65cuxc744ux4ed6ux306fux30ecux30a3ux30fcux30d6ux3068}}
+
+h6 Heading会會생활을他はレィーブと
+
+\textbf{Warning}: This is a custom box that may be used to show warning
+messages in your document.
+
+\begin{quote}
+\textbf{注意：}
+
+使用 \passthrough{\lstinline!AUTO\_INCREMENT!}
+可能会给生产环境带热点问题。
+\end{quote}
+
+\begin{info-box}
+
+{[}!NOTE{]}\\
+使用 \passthrough{\lstinline!AUTO\_INCREMENT!}
+可能会给生产环境带热点问题。
+
+\end{info-box}
+
+\begin{quote}
+warning
+\end{quote}
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam aliquet
+libero quis lectus elementum fermentum.
+
+Fusce aliquet augue sapien, non efficitur mi ornare sed. Morbi at dictum
+felis. Pellentesque tortor lacus, semper et neque vitae, egestas commodo
+nisl.
+
+\begin{figure}
+\centering
+\includegraphics{./media/add-index-load-1-b4096.png}
+\caption{playground gitpod summary测试1}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics{./media/add-index-load-1-b2048.png}
+\caption{playground gitpod summary测试2}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics{./media/add-index-load-1-b1024.png}
+\caption{playground gitpod summary测试3}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics{./media/add-index-load-1-b512.png}
+\caption{playground gitpod summary测试4}
+\end{figure}
+
+\hypertarget{horizontal-rules}{%
+\subsection{Horizontal Rules}\label{horizontal-rules}}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\hypertarget{typographic-replacements}{%
+\subsection{Typographic replacements}\label{typographic-replacements}}
+
+Enable typographer option to see result.中文测试。
+
+\begin{enumerate}
+\def\labelenumi{(\alph{enumi})}
+\setcounter{enumi}{2}
+\item
+  \begin{enumerate}
+  \def\labelenumii{(\Alph{enumii})}
+  \setcounter{enumii}{2}
+  \item
+    \begin{enumerate}
+    \def\labelenumiii{(\alph{enumiii})}
+    \setcounter{enumiii}{17}
+    \item
+      \begin{enumerate}
+      \def\labelenumiv{(\Alph{enumiv})}
+      \setcounter{enumiv}{17}
+      \tightlist
+      \item
+        (tm) (TM) (p) (P) +-
+      \end{enumerate}
+    \end{enumerate}
+  \end{enumerate}
+\end{enumerate}
+
+test.. test\ldots{} test\ldots.. test?\ldots.. test!\ldots.
+
+!!!!!! ???? ,, -- ---
+
+``Smartypants, double quotes'' and `single quotes'
+
+永和九年，岁在癸丑，暮春之初，会于会稽山阴之兰亭，修禊事也。群贤毕至，少长咸集。此地有崇山峻岭，茂林修竹；又有清流激湍，映带左右，引以为流觞曲水，列坐其次。虽无丝竹管弦之盛，一觞一咏，亦足以畅叙幽情。是日也，天朗气清，惠风和畅，仰观宇宙之大，俯察品类之盛，所以游目骋怀，足以极视听之娱，信可乐也。
+夫人之相与，俯仰一世，或取诸怀抱，悟言一室之内；或因寄所托，放浪形骸之外。虽趣舍万殊，静躁不同，当其欣于所遇，暂得于己，快然自足，曾不知老之将至。及其所之既倦，情随事迁，感慨系之矣。向之所欣，俯仰之间，已为陈迹，犹不能不以之兴怀。况修短随化，终期于尽。古人云：``死生亦大矣。''岂不痛哉！
+
+永和九年，歲在癸醜，暮春之初，會于會稽山陰之蘭亭，修禊事也。群賢畢至，少長鹹集。此地有崇山峻嶺，茂林修竹；又有清流激湍，映帶左右，引以爲流觞曲水，列坐其次。雖無絲竹管弦之盛，壹觞壹詠，亦足以暢敘幽情。是日也，天朗氣清，惠風和暢，仰觀宇宙之大，俯察品類之盛，所以遊目騁懷，足以極視聽之娛，信可樂也。
+夫人之相與，俯仰壹世，或取諸懷抱，悟言壹室之內；或因寄所托，放浪形骸之外。雖趣舍萬殊，靜躁不同，當其欣于所遇，暫得于己，快然自足，曾不知老之將至。及其所之既倦，情隨事遷，感慨系之矣。向之所欣，俯仰之間，已爲陳迹，猶不能不以之興懷。況修短隨化，終期于盡。古人雲：``死生亦大矣。''豈不痛哉！
+
+시장에 내다 팔면서 생활을 꾸려 가고 있었습니다. ˝망고가 익을 때가
+되었는데 누가 먼저 가서 좀 따왔으며 좋겠어.˝ ˝그래, 그렇지. 큰형 먼저
+갔다와.˝ 동생들이 부추기자 첫째가 못 이긴 척하며 망고나무한테고
+갔습니다. 그리고 어깨에 잔뜩 힘을 주며 말했습니다. ˝어이, 망고나무, 열매
+좀 주겠어?˝
+
+色々な趣味がある、でも三つのことを話すつもりなので、知り合いましょうです。一番の趣味は美術です。絵を描いて写真を撮って陶芸を作ります。二番目はアニメを見てマンガを読むことです。中学からそのことが好きでした。アニメとマンガの瑞々しい色や面白いアニメキャラは豪快だと思います。他はレィーブとコンサートでダンスをします。ディージェー「deadmau5」の音楽に合わせてダンスするのが大好きです。
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
+velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
+occaecat cupidatat non proident, sunt in culpa qui officia deserunt
+mollit anim id est laborum.
+
+\hypertarget{emphasis}{%
+\subsection{Emphasis}\label{emphasis}}
+
+\textbf{This is bold textHeading会會생활을他はレィーブと}
+
+\textbf{This is bold text}
+
+\emph{This is italic text}
+
+\emph{This is italic text}
+
+\st{Strikethrough}
+
+\hypertarget{blockquotes}{%
+\subsection{Blockquotes}\label{blockquotes}}
+
+\begin{quote}
+Blockquotes can also be nested\ldots{} \textgreater{} \ldots by using
+additional greater-than signs right next to each other\ldots{}
+\textgreater{} \textgreater{} \ldots or with spaces between arrows.
+\end{quote}
+
+\hypertarget{lists}{%
+\subsection{Lists}\label{lists}}
+
+Unordered
+
+\begin{itemize}
+\tightlist
+\item
+  Create a list by starting a line with \passthrough{\lstinline!+!},
+  \passthrough{\lstinline!-!}, or \passthrough{\lstinline!*!}
+\item
+  Sub-lists are made by indenting 2 spaces:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Marker character change forces new list start:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Ac tristique libero volutpat at
+    \item
+      Facilisis in pretium nisl aliquet
+    \item
+      Nulla volutpat aliquam velit
+    \end{itemize}
+  \end{itemize}
+\item
+  Very easy!
+\end{itemize}
+
+Ordered
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Lorem ipsum dolor sit amet
+\item
+  Consectetur adipiscing elit
+\item
+  Integer molestie lorem at massa
+\item
+  You can use sequential numbers\ldots{}
+\item
+  \ldots or keep all the numbers as \passthrough{\lstinline!1.!}
+\end{enumerate}
+
+Start numbering with offset:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{56}
+\tightlist
+\item
+  foo
+\item
+  bar
+\end{enumerate}
+
+\hypertarget{code}{%
+\subsection{Code}\label{code}}
+
+Inline \passthrough{\lstinline!code 会會생활을他はレィーブと!}
+
+Indented code
+
+\begin{lstlisting}
+// Some comments
+line 1 of code
+line 2 of code
+line 3 of code
+\end{lstlisting}
+
+Block code ``fences''
+
+\begin{lstlisting}
+Sample text here...
+\end{lstlisting}
+
+Syntax highlighting
+
+\begin{lstlisting}
+var foo = function (bar) {
+  return bar++;
+};
+会會생활을他はレィーブと
+
+console.log(foo(5));
+\end{lstlisting}
+
+\hypertarget{tables}{%
+\subsection{Tables}\label{tables}}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.3529}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.6471}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Option
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Description
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+data & path to data files to supply the data that will be passed into
+templates. \\
+engine & engine to be used for processing templates. Handlebars is the
+default. \\
+ext & extension to be used for dest files. \\
+\end{longtable}
+
+Right aligned columns
+
+\begin{longtable}[]{@{}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.3684}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.6316}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedleft
+Option
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Description
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+data & path to data files to supply the data that will be passed into
+templates. \\
+engine & engine to be used for processing templates. Handlebars is the
+default. \\
+ext & extension to be used for dest files. \\
+\end{longtable}
+
+\hypertarget{links}{%
+\subsection{Links}\label{links}}
+
+\href{http://dev.nodeca.com}{link text}
+
+\href{http://nodeca.github.io/pica/demo/}{link with title}
+
+Autoconverted link https://github.com/nodeca/pica (enable linkify to
+see)
+
+\hypertarget{images}{%
+\subsection{Images}\label{images}}
+
+\includegraphics{https://octodex.github.com/images/minion.png}
+\includegraphics{https://octodex.github.com/images/stormtroopocat.jpg}
+
+Like links, Images also have a footnote style syntax
+
+\begin{figure}
+\centering
+\includegraphics{https://octodex.github.com/images/dojocat.jpg}
+\caption{Alt text}
+\end{figure}
+
+With a reference later in the document defining the URL location:
+
+\hypertarget{plugins}{%
+\subsection{Plugins}\label{plugins}}
+
+The killer feature of \passthrough{\lstinline!markdown-it!} is very
+effective support of
+\href{https://www.npmjs.org/browse/keyword/markdown-it-plugin}{syntax
+plugins}.
+
+\hypertarget{emojies}{%
+\subsubsection{\texorpdfstring{\href{https://github.com/markdown-it/markdown-it-emoji}{Emojies}}{Emojies}}\label{emojies}}
+
+\begin{quote}
+Classic markup: :wink: :cry: :laughing: :yum:
+
+Shortcuts (emoticons): :-) :-( 8-) ;)
+\end{quote}
+
+see
+\href{https://github.com/markdown-it/markdown-it-emoji\#change-output}{how
+to change output} with twemoji.
+
+\hypertarget{subscript-superscript}{%
+\subsubsection{\texorpdfstring{\href{https://github.com/markdown-it/markdown-it-sub}{Subscript}
+/
+\href{https://github.com/markdown-it/markdown-it-sup}{Superscript}}{Subscript / Superscript}}\label{subscript-superscript}}
+
+\begin{itemize}
+\tightlist
+\item
+  19\textsuperscript{th}
+\item
+  H\textsubscript{2}O
+\end{itemize}
+
+\hypertarget{ins}{%
+\subsubsection{\texorpdfstring{\href{https://github.com/markdown-it/markdown-it-ins}{\textless ins\textgreater{}}}{\textless ins\textgreater{}}}\label{ins}}
+
+++Inserted text++
+
+\hypertarget{mark}{%
+\subsubsection{\texorpdfstring{\href{https://github.com/markdown-it/markdown-it-mark}{\textless mark\textgreater{}}}{\textless mark\textgreater{}}}\label{mark}}
+
+==Marked text==
+
+\hypertarget{footnotes}{%
+\subsubsection{\texorpdfstring{\href{https://github.com/markdown-it/markdown-it-footnote}{Footnotes}}{Footnotes}}\label{footnotes}}
+
+Footnote 1 link\footnote{Footnote \textbf{can have markup}
+
+  and multiple paragraphs.}.
+
+Footnote 2 link\footnote{Footnote text.}.
+
+Inline footnote\footnote{Text of inline footnote} definition.
+
+Duplicated footnote reference\footnote{Footnote text.}.
+
+\hypertarget{definition-lists}{%
+\subsubsection{\texorpdfstring{\href{https://github.com/markdown-it/markdown-it-deflist}{Definition
+lists}}{Definition lists}}\label{definition-lists}}
+
+\begin{description}
+\item[Term 1]
+Definition 1 with lazy continuation.
+\item[Term 2 with \emph{inline markup}]
+Definition 2
+
+\begin{lstlisting}
+{ some code, part of Definition 2 }
+\end{lstlisting}
+
+Third paragraph of definition 2.
+\end{description}
+
+\emph{Compact style:}
+
+\begin{description}
+\tightlist
+\item[Term 1]
+Definition 1
+\item[Term 2]
+Definition 2a
+
+Definition 2b
+\end{description}
+
+\hypertarget{abbreviations}{%
+\subsubsection{\texorpdfstring{\href{https://github.com/markdown-it/markdown-it-abbr}{Abbreviations}}{Abbreviations}}\label{abbreviations}}
+
+This is HTML abbreviation example.
+
+It converts ``HTML'', but keep intact partial entries like
+``xxxHTMLyyy'' and so on.
+
+*{[}HTML{]}: Hyper Text Markup Language
+
+\hypertarget{custom-containers}{%
+\subsubsection{\texorpdfstring{\href{https://github.com/markdown-it/markdown-it-container}{Custom
+containers}}{Custom containers}}\label{custom-containers}}
+
+\emph{here be dragons}
+
+\end{document}

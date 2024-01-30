@@ -3,7 +3,7 @@
 words = 0
 characters = 0
 characters_and_spaces = 0
-process_anyway = false
+process_anyway = true
 
 wordcount = {
   Str = function(el)
@@ -40,17 +40,29 @@ wordcount = {
   end,
 
   BlockQuote = function(el)
-    -- print(el.c[1].c[1]) -- 获取quote的开头部分
+    --print(el.c[1]) -- 获取quote的开头部分
+    -- https://stackoverflow.com/q/76894984/
 
     -- github旧风格
     if (el.c[1].c[1].t == "Strong") and (el.c[1].c[1].c[1].text == "注意：") then
-        print("bingo")
+        --print("bingo")
+        --print(el)
+
+        --local raw_elem = '\\begin{error-box}' .. el.c[1].content .. '\\end{error-box}'
+        --local raw_elem = '\\begin{error-box}this is test errorbox\\end{error-box}'
+        --return pandoc.RawBlock('latex', raw_elem) -- TOFIX
+        --local myenv = pandoc.Div(el.content, pandoc.Attr(), {'latex', '\\begin{error-box}'})
+        --table.insert(myenv.content, pandoc.RawBlock('latex', '\\end{error-box}'))
+        table.insert(el.content, 1, pandoc.RawBlock('latex', '\\begin{error-box}'))
+        table.insert(el.content, pandoc.RawBlock('latex', '\\end{error-box}'))
+        --print(el)
+        return el
     end
 
     -- github新风格
-    if (el.c[1].c[1].text == "[!NOTE]") then
-      print("bingo again")
-    end
+    --if (el.c[1].c[1].text == "[!NOTE]") then
+    --  print("bingo again")
+    --end
 
   end
 }
@@ -70,9 +82,10 @@ function Pandoc(el)
     -- print(words .. " words in body")
     -- print(characters .. " characters in body")
     -- print(characters_and_spaces .. " characters in body (including spaces)")
-    
-    
+    print(el)
+
     if not process_anyway then
       os.exit(0)
     end
 end
+
