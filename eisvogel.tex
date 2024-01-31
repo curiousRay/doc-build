@@ -959,41 +959,11 @@ $endif$
   }
 }
 
+%% lihao: add risk grade quote highlight, work with lua-filter
 \usepackage{tcolorbox}
-
 \newtcolorbox{info-box}{colback=cyan!5!white,arc=0pt,outer arc=0pt,colframe=cyan!60!black}
 \newtcolorbox{warning-box}{colback=orange!5!white,arc=0pt,outer arc=0pt,colframe=orange!80!black}
 \newtcolorbox{error-box}{colback=red!5!white,arc=0pt,outer arc=0pt,colframe=red!75!black}
-
-
-% quote style
-% http://tex.stackexchange.com/questions/179982/add-a-black-border-to-block-quotations
-\usepackage{framed}
-% \usepackage{xcolor}
-\let\oldquote=\quote
-\let\endoldquote=\endquote
-
-\newtoggle{containsWarning}
-\togglefalse{containsWarning}
-\newcommand{\checkForWarning}[1]{
-  \ifstrequal{#1}{warning}{\toggletrue{containsWarning}} % may change into instring
-}
-
-%\renewenvironment{quote}{\begin{error-box}\begin{oldquote}}{\end{oldquote}\end{error-box}}
-%\renewenvironment{quote}{
-%  \global\togglefalse{containsWarning}
-%  \checkForWarning{\quotecontents} % change the \quotecontents placeholder 
-%  \iftoggle{containsWarning}{
-%    \begin{error-box}
-%  }{\begin{oldquote}}
-%  }{
-%  \checkForWarning{\quotecontents} % change the \quotecontents placeholder 
-%  \iftoggle{containsWarning}{
-%    \end{error-box}
-%  }{\end{oldquote}}
-%  }
-
-
 
 
 \begin{document}

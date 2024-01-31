@@ -135,5 +135,6 @@ function BlockQuote(el)
 end
 
 function Code(el)
+  print(el)
   return el
 end
