@@ -4,7 +4,6 @@ function BlockQuote(el)
   -- https://stackoverflow.com/q/76894984/
 
   function IsGradeKeywordFound(str, type)
-
     -- Modify here
     str_info = {"提示","注意","Note","NOTE","Info","INFO"}
     str_warning = {"警告","小心","Warning","WARNING","Caution","CAUTION"}
@@ -42,16 +41,17 @@ function BlockQuote(el)
 
   -- **Note:** or [!NOTE]
   if ((el.c[1].c[1].t == "Strong") 
-    and (IsGradeKeywordFound(el.c[1].c[1].c[1].text, info)))
+    and (IsGradeKeywordFound(el.c[1].c[1].c[1].text, "info")))
     or (el.c[1].c[1].text == "[!NOTE]")
     then
       table.insert(el.content, 1, pandoc.RawBlock("latex", "\\begin{info-box}"))
       table.insert(el.content, pandoc.RawBlock("latex", "\\end{info-box}"))
+      --print(el)
       return el.content
   end
 
   if ((el.c[1].c[1].t == "Strong") 
-    and (IsGradeKeywordFound(el.c[1].c[1].c[1].text, warning)))
+    and (IsGradeKeywordFound(el.c[1].c[1].c[1].text, "warning")))
     or (el.c[1].c[1].text == "[!WARNING]")
     then
       table.insert(el.content, 1, pandoc.RawBlock("latex", "\\begin{warning-box}"))
@@ -60,7 +60,7 @@ function BlockQuote(el)
   end
 
   if ((el.c[1].c[1].t == "Strong") 
-    and (IsGradeKeywordFound(el.c[1].c[1].c[1].text, error)))
+    and (IsGradeKeywordFound(el.c[1].c[1].c[1].text, "error")))
     or (el.c[1].c[1].text == "[!CAUTION]")
     then
       table.insert(el.content, 1, pandoc.RawBlock("latex", "\\begin{error-box}"))
