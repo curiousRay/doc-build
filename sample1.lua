@@ -44,6 +44,9 @@ function BlockQuote(el)
     and (IsGradeKeywordFound(el.c[1].c[1].c[1].text, "info")))
     or (el.c[1].c[1].text == "[!NOTE]")
     then
+      if (el.c[1].c[1].text == "[!NOTE]") then
+        el.content[1] = pandoc.Strong(pandoc.Str("Note:"))
+      end
       table.insert(el.content, 1, pandoc.RawBlock("latex", "\\begin{info-box}"))
       table.insert(el.content, pandoc.RawBlock("latex", "\\end{info-box}"))
       --print(el)
@@ -72,4 +75,9 @@ end
 
 function Code(el)
   return el
+end
+
+function Meta(meta)
+  print(meta)
+  return meta
 end
