@@ -489,41 +489,23 @@
   }
 }
 
+%% lihao: add risk grade quote highlight, work with lua-filter
 \usepackage{tcolorbox}
-
 \newtcolorbox{info-box}{colback=cyan!5!white,arc=0pt,outer arc=0pt,colframe=cyan!60!black}
 \newtcolorbox{warning-box}{colback=orange!5!white,arc=0pt,outer arc=0pt,colframe=orange!80!black}
 \newtcolorbox{error-box}{colback=red!5!white,arc=0pt,outer arc=0pt,colframe=red!75!black}
 
 
-% quote style
-% http://tex.stackexchange.com/questions/179982/add-a-black-border-to-block-quotations
-\usepackage{framed}
-% \usepackage{xcolor}
-\let\oldquote=\quote
-\let\endoldquote=\endquote
-
-\newtoggle{containsWarning}
-\togglefalse{containsWarning}
-\newcommand{\checkForWarning}[1]{
-  \ifstrequal{#1}{warning}{\toggletrue{containsWarning}} % may change into instring
-}
-
-%\renewenvironment{quote}{\begin{error-box}\begin{oldquote}}{\end{oldquote}\end{error-box}}
-%\renewenvironment{quote}{
-%  \global\togglefalse{containsWarning}
-%  \checkForWarning{\quotecontents} % change the \quotecontents placeholder 
-%  \iftoggle{containsWarning}{
-%    \begin{error-box}
-%  }{\begin{oldquote}}
-%  }{
-%  \checkForWarning{\quotecontents} % change the \quotecontents placeholder 
-%  \iftoggle{containsWarning}{
-%    \end{error-box}
-%  }{\end{oldquote}}
-%  }
-
-
+%% lihao: add backgroundcolor to `code`, work with lua-filter
+%%\definecolor{inlinecode-bgcolor}{HTML}{f7f7f7}
+%%\definecolor{inlinecode-textcolor}{HTML}{ea4e36}
+%%\let\oldlstinline\lstinline
+%%\renewcommand{\lstinline}[1]{
+%%  \textcolor{inlinecode-textcolor}
+%%  {\colorbox{inlinecode-bgcolor}
+%%    {\oldlstinline{#1}}
+%%  }
+%%}
 
 
 \begin{document}
@@ -606,6 +588,8 @@ Heading会會생활을他はレィーブと}\label{h5-headingux4f1aux6703uxc0ddu
 
 h6 Heading会會생활을他はレィーブと
 
+永和九年\textcolor{green}{\lstinline{，岁在癸丑12345abcde}}，暮春之初
+
 \textbf{Warning}: This is a custom box that may be used to show warning
 messages in your document.
 
@@ -613,7 +597,7 @@ messages in your document.
 
 \textbf{注意：}
 
-使用 \passthrough{\lstinline!AUTO\_INCREMENT!}
+使用 \textcolor{green}{\lstinline{AUTO_INCREMENT}}
 可能会给生产环境带热点问题。
 
 \end{info-box}
@@ -621,7 +605,7 @@ messages in your document.
 \begin{info-box}
 
 \textbf{注意}\\
-使用 \passthrough{\lstinline!AUTO\_INCREMENT!}
+使用 \textcolor{green}{\lstinline{AUTO_INCREMENT}}
 可能会给生产环境带热点问题。
 
 \end{info-box}
@@ -629,7 +613,7 @@ messages in your document.
 \begin{warning-box}
 
 \textbf{警告}\\
-使用 \passthrough{\lstinline!AUTO\_INCREMENT!}
+使用 \textcolor{green}{\lstinline{AUTO_INCREMENT}}
 可能会给生产环境带热点问题。
 
 \end{warning-box}
@@ -780,8 +764,9 @@ Unordered
 \begin{itemize}
 \tightlist
 \item
-  Create a list by starting a line with \passthrough{\lstinline!+!},
-  \passthrough{\lstinline!-!}, or \passthrough{\lstinline!*!}
+  Create a list by starting a line with
+  \textcolor{green}{\lstinline{+}}, \textcolor{green}{\lstinline{-}}, or
+  \textcolor{green}{\lstinline{*}}
 \item
   Sub-lists are made by indenting 2 spaces:
 
@@ -817,7 +802,7 @@ Ordered
 \item
   You can use sequential numbers\ldots{}
 \item
-  \ldots or keep all the numbers as \passthrough{\lstinline!1.!}
+  \ldots or keep all the numbers as \textcolor{green}{\lstinline{1.}}
 \end{enumerate}
 
 Start numbering with offset:
@@ -835,7 +820,7 @@ Start numbering with offset:
 \hypertarget{code}{%
 \subsection{Code}\label{code}}
 
-Inline \passthrough{\lstinline!code 会會생활을他はレィーブと!}
+Inline \textcolor{green}{\lstinline{code 会會생활을他はレィーブと}}
 
 Indented code
 
@@ -937,7 +922,7 @@ With a reference later in the document defining the URL location:
 \hypertarget{plugins}{%
 \subsection{Plugins}\label{plugins}}
 
-The killer feature of \passthrough{\lstinline!markdown-it!} is very
+The killer feature of \textcolor{green}{\lstinline{markdown-it}} is very
 effective support of
 \href{https://www.npmjs.org/browse/keyword/markdown-it-plugin}{syntax
 plugins}.

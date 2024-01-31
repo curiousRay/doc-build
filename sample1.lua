@@ -2,6 +2,18 @@
 -- hyphen cannot be used in lua string
 doc_lang , _ = string.gsub(tostring(PANDOC_WRITER_OPTIONS.variables["lang"]), "%-", "_")
 
+function Code(el)
+  -- TODO: escaping problem of `#`, `$`
+  
+  code_head_str = '\\lstinline{'
+  code_rear_str = '}'
+  --return el
+  wrapped = code_head_str .. el.text .. code_rear_str
+
+  res = pandoc.RawInline('latex', '\\colorbox{inlinecode-bgcolor}{' .. wrapped .. '}')
+  return res
+end
+
 function BlockQuote(el)
   -- print(el.c[1])
   -- print(el.c[1].t)
@@ -132,9 +144,4 @@ function BlockQuote(el)
       return el.content
   end
 
-end
-
-function Code(el)
-  print(el)
-  return el
 end
