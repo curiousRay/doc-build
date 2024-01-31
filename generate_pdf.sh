@@ -7,6 +7,7 @@ sudo docker run --rm \
        	--user $(id -u):$(id -g) \
        	nightkeeper:v1 test.md -o test.pdf --template eisvogel.tex \
         --toc \
+        --toc-depth=5 \
        	--listings \
         --pdf-engine "xelatex" \
         --lua-filter "./sample1.lua" \
