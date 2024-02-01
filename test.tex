@@ -497,16 +497,7 @@
 
 
 %% lihao: add backgroundcolor to `code`, work with lua-filter
-%%\definecolor{inlinecode-bgcolor}{HTML}{f7f7f7}
-%%\definecolor{inlinecode-textcolor}{HTML}{ea4e36}
-%%\let\oldlstinline\lstinline
-%%\renewcommand{\lstinline}[1]{
-%%  \textcolor{inlinecode-textcolor}
-%%  {\colorbox{inlinecode-bgcolor}
-%%    {\oldlstinline{#1}}
-%%  }
-%%}
-
+\definecolor{inlinecode-bgcolor}{HTML}{f7f7f7}
 
 \begin{document}
 %%
@@ -555,7 +546,7 @@
 
 {
 \hypersetup{linkcolor=}
-\setcounter{tocdepth}{3}
+\setcounter{tocdepth}{5}
 \tableofcontents
 
 
@@ -588,7 +579,7 @@ Heading会會생활을他はレィーブと}\label{h5-headingux4f1aux6703uxc0ddu
 
 h6 Heading会會생활을他はレィーブと
 
-永和九年\textcolor{green}{\lstinline{，岁在癸丑12345abcde}}，暮春之初
+永和九年\colorbox{inlinecode-bgcolor}{\lstinline{，岁在癸丑12345\abcde\#\%\}a\_{}b}}，暮春之初
 
 \textbf{Warning}: This is a custom box that may be used to show warning
 messages in your document.
@@ -597,7 +588,7 @@ messages in your document.
 
 \textbf{注意：}
 
-使用 \textcolor{green}{\lstinline{AUTO_INCREMENT}}
+使用 \colorbox{inlinecode-bgcolor}{\lstinline{AUTO\_{}INCREMENT}}
 可能会给生产环境带热点问题。
 
 \end{info-box}
@@ -605,7 +596,7 @@ messages in your document.
 \begin{info-box}
 
 \textbf{注意}\\
-使用 \textcolor{green}{\lstinline{AUTO_INCREMENT}}
+使用 \colorbox{inlinecode-bgcolor}{\lstinline{AUTO\_{}INCREMENT}}
 可能会给生产环境带热点问题。
 
 \end{info-box}
@@ -613,7 +604,7 @@ messages in your document.
 \begin{warning-box}
 
 \textbf{警告}\\
-使用 \textcolor{green}{\lstinline{AUTO_INCREMENT}}
+使用 \colorbox{inlinecode-bgcolor}{\lstinline{AUTO\_{}INCREMENT}}
 可能会给生产环境带热点问题。
 
 \end{warning-box}
@@ -765,8 +756,9 @@ Unordered
 \tightlist
 \item
   Create a list by starting a line with
-  \textcolor{green}{\lstinline{+}}, \textcolor{green}{\lstinline{-}}, or
-  \textcolor{green}{\lstinline{*}}
+  \colorbox{inlinecode-bgcolor}{\lstinline{+}},
+  \colorbox{inlinecode-bgcolor}{\lstinline{-}}, or
+  \colorbox{inlinecode-bgcolor}{\lstinline{*}}
 \item
   Sub-lists are made by indenting 2 spaces:
 
@@ -802,7 +794,8 @@ Ordered
 \item
   You can use sequential numbers\ldots{}
 \item
-  \ldots or keep all the numbers as \textcolor{green}{\lstinline{1.}}
+  \ldots or keep all the numbers as
+  \colorbox{inlinecode-bgcolor}{\lstinline{1.}}
 \end{enumerate}
 
 Start numbering with offset:
@@ -820,7 +813,8 @@ Start numbering with offset:
 \hypertarget{code}{%
 \subsection{Code}\label{code}}
 
-Inline \textcolor{green}{\lstinline{code 会會생활을他はレィーブと}}
+Inline
+\colorbox{inlinecode-bgcolor}{\lstinline{code 会會생활을他はレィーブと}}
 
 Indented code
 
@@ -846,6 +840,35 @@ var foo = function (bar) {
 会會생활을他はレィーブと
 
 console.log(foo(5));
+\end{lstlisting}
+
+\begin{lstlisting}[language=HTML]
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>文档标题</title>
+</head>
+<body>
+文档内容......
+</body>
+</html>
+\end{lstlisting}
+
+\begin{lstlisting}[language=SQL]
+SELECT * FROM Websites
+WHERE country='CN'
+AND alexa > 50;
+\end{lstlisting}
+
+\begin{lstlisting}[language={C++}]
+#include <iostream>
+using namespace std;
+int main()
+{
+    cout << "Hello, world!" << "\n";
+    return 0;
+}
 \end{lstlisting}
 
 \hypertarget{tables}{%
@@ -922,8 +945,9 @@ With a reference later in the document defining the URL location:
 \hypertarget{plugins}{%
 \subsection{Plugins}\label{plugins}}
 
-The killer feature of \textcolor{green}{\lstinline{markdown-it}} is very
-effective support of
+The killer feature of
+\colorbox{inlinecode-bgcolor}{\lstinline{markdown-it}} is very effective
+support of
 \href{https://www.npmjs.org/browse/keyword/markdown-it-plugin}{syntax
 plugins}.
 
