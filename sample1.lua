@@ -3,8 +3,7 @@
 doc_lang , _ = string.gsub(tostring(PANDOC_WRITER_OPTIONS.variables["lang"]), "%-", "_")
 
 function Code(el)
-  esc_text, _ = el.text:gsub("\\", "\\textbackslash ")
-  -- todo: no display of backslash
+  esc_text, _ = el.text:gsub("\\", "\\\\")
   esc_text, _ = esc_text:gsub("#", "\\#")
   esc_text, _ = esc_text:gsub("%%", "\\%%")
   esc_text, _ = esc_text:gsub("}", "\\}")
@@ -15,7 +14,7 @@ function Code(el)
   code_head_str = '\\lstinline{'
   code_rear_str = '}'
   wrapped = code_head_str .. esc_text .. code_rear_str
-  print('\\colorbox{inlinecode-bgcolor}{' .. wrapped .. '}')
+  --print('\\colorbox{inlinecode-bgcolor}{' .. wrapped .. '}')
   res = pandoc.RawInline('latex', '\\colorbox{inlinecode-bgcolor}{' .. wrapped .. '}')
   return res
 end
