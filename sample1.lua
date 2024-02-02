@@ -3,21 +3,19 @@
 doc_lang , _ = string.gsub(tostring(PANDOC_WRITER_OPTIONS.variables["lang"]), "%-", "_")
 
 function Code(el)
-  -- TODO: escaping problem of `#`, `$`
-  esc_text, _ = el.text:gsub("\\", "\\textbackslash") -- this result in a spare space
-  esc_text, _ = el.text:gsub("#", "\\#")
+  esc_text, _ = el.text:gsub("\\", "\\textbackslash ")
+  -- todo: no display of backslash
+  esc_text, _ = esc_text:gsub("#", "\\#")
   esc_text, _ = esc_text:gsub("%%", "\\%%")
   esc_text, _ = esc_text:gsub("}", "\\}")
-  esc_text, _ = esc_text:gsub("$$", "\\$$}")
-
-  -- todo: add $ ~ ^ { &
-  print(esc_text)
+  esc_text, _ = esc_text:gsub("{", "\\{")
+  esc_text, _ = esc_text:gsub("$$", "\\$$")
+  esc_text, _ = esc_text:gsub("&", "\\&")
 
   code_head_str = '\\lstinline{'
   code_rear_str = '}'
-  --return el
   wrapped = code_head_str .. esc_text .. code_rear_str
-
+  print('\\colorbox{inlinecode-bgcolor}{' .. wrapped .. '}')
   res = pandoc.RawInline('latex', '\\colorbox{inlinecode-bgcolor}{' .. wrapped .. '}')
   return res
 end
