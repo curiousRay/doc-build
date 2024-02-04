@@ -11,11 +11,11 @@ function Code(el)
   esc_text, _ = esc_text:gsub("$$", "\\$$")
   esc_text, _ = esc_text:gsub("&", "\\&")
 
-  code_head_str = '\\lstinline[identifierstyle=\\color{inlinecode-textcolor}, basicstyle=\\color{inlinecode-textcolor}\\ttfamily{}]{'
-  code_rear_str = '}'
+  code_head_str = '\\lstinline[identifierstyle=\\color{inlinecode-textcolor}, basicstyle=\\color{inlinecode-textcolor}\\ttfamily{}]¿'
+  code_rear_str = '¿'
   wrapped = code_head_str .. esc_text .. code_rear_str
   --print('\\colorbox{inlinecode-bgcolor}{' .. wrapped .. '}')
-  res = pandoc.RawInline('latex', '\\colorbox{inlinecode-bgcolor}{\\textcolor{inlinecode-textcolor}{' .. wrapped .. '}}')
+  res = pandoc.RawInline('latex', '\\colorbox{inlinecode-bgcolor}{' .. wrapped .. '}')
   return res
 end
 
