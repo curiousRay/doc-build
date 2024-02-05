@@ -3,7 +3,7 @@
 doc_lang , _ = string.gsub(tostring(PANDOC_WRITER_OPTIONS.variables["lang"]), "%-", "_")
 
 -- experimental: add background color to inline-code
-show_inlinecode_background = false
+show_inlinecode_background = true
 
 function Code(el)
   esc_text, _ = el.text:gsub("\\", "\\\\")
