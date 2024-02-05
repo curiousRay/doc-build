@@ -18,13 +18,11 @@ function Code(el)
   code_head_str = '\\lstinline[breaklines=true, identifierstyle=\\color{inlinecode-textcolor}, basicstyle=\\color{inlinecode-textcolor}\\ttfamily{}]¿'
   code_rear_str = '¿'
   wrapped = code_head_str .. esc_text .. code_rear_str
-  --print('\\colorbox{inlinecode-bgcolor}{' .. wrapped .. '}')
-  res = pandoc.RawInline('latex', '\\colorbox{inlinecode-bgcolor}{' .. wrapped .. '}')
-  
+    
   if (show_inlinecode_background) then
-    return res
+    return pandoc.RawInline('latex', '\\colorbox{inlinecode-bgcolor}{' .. wrapped .. '}')
   else
-    return el
+    return pandoc.RawInline('latex', wrapped)
   end
 end
 
