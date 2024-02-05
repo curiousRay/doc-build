@@ -10,6 +10,7 @@ function Code(el)
   esc_text, _ = esc_text:gsub("{", "\\{")
   esc_text, _ = esc_text:gsub("$$", "\\$$")
   esc_text, _ = esc_text:gsub("&", "\\&")
+  esc_text, _ = esc_text:gsub("~", "\\~")
 
   code_head_str = '\\lstinline[identifierstyle=\\color{inlinecode-textcolor}, basicstyle=\\color{inlinecode-textcolor}\\ttfamily{}]¿'
   code_rear_str = '¿'
