@@ -2,6 +2,9 @@
 -- hyphen cannot be used in lua string
 doc_lang , _ = string.gsub(tostring(PANDOC_WRITER_OPTIONS.variables["lang"]), "%-", "_")
 
+-- experimental: add background color to inline-code
+show_inlinecode_background = false
+
 function Code(el)
   esc_text, _ = el.text:gsub("\\", "\\\\")
   esc_text, _ = esc_text:gsub("#", "\\#")
@@ -12,12 +15,17 @@ function Code(el)
   esc_text, _ = esc_text:gsub("&", "\\&")
   esc_text, _ = esc_text:gsub("~", "\\~")
 
-  code_head_str = '\\lstinline[identifierstyle=\\color{inlinecode-textcolor}, basicstyle=\\color{inlinecode-textcolor}\\ttfamily{}]¿'
+  code_head_str = '\\lstinline[breaklines=true, identifierstyle=\\color{inlinecode-textcolor}, basicstyle=\\color{inlinecode-textcolor}\\ttfamily{}]¿'
   code_rear_str = '¿'
   wrapped = code_head_str .. esc_text .. code_rear_str
   --print('\\colorbox{inlinecode-bgcolor}{' .. wrapped .. '}')
   res = pandoc.RawInline('latex', '\\colorbox{inlinecode-bgcolor}{' .. wrapped .. '}')
-  return res
+  
+  if (show_inlinecode_background) then
+    return res
+  else
+    return el
+  end
 end
 
 function BlockQuote(el)
