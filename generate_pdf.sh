@@ -11,6 +11,7 @@ sudo docker run --rm \
        	--listings \
         --pdf-engine "xelatex" \
         --lua-filter "./sample1.lua" \
+        --from=markdown-markdown_in_html_blocks \
         --number-sections \
         --filter pandoc-latex-environment \
     -V lang="zh-CN" \

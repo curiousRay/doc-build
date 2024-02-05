@@ -5,6 +5,14 @@ doc_lang , _ = string.gsub(tostring(PANDOC_WRITER_OPTIONS.variables["lang"]), "%
 -- experimental: add background color to inline-code
 show_inlinecode_background = true
 
+function RawBlock (raw)
+  if (raw.format:match 'html') then
+    return pandoc.read(raw.text, 'html').blocks
+  else
+    return raw
+  end
+end
+
 function Code(el)
   esc_text, _ = el.text:gsub("\\", "\\\\")
   esc_text, _ = esc_text:gsub("#", "\\#")
