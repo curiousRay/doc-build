@@ -5,9 +5,49 @@ doc_lang , _ = string.gsub(tostring(PANDOC_WRITER_OPTIONS.variables["lang"]), "%
 -- experimental: add background color to inline-code
 show_inlinecode_background = true
 
+function Table (el)
+  --表的长度
+  -- print(#el.colspecs)
+
+  for key,value in pairs(el.colspecs) do
+      --print(key, value)
+      --print("第" .. key .. "列的系数为")
+      --print(value[2])
+      --value[2] = 1 / #el.colspecs
+  end
+  
+  return el
+end
+
+function OptimizeColWidth (el)
+  return el
+end
+
 function RawBlock (raw)
   if (raw.format:match 'html') then
-    return pandoc.read(raw.text, 'html').blocks
+    if (pandoc.read(raw.text, 'html').blocks[1].tag == "Table") then
+    
+      -- htmltable_singular is iterator of each html-table
+      htmltable = pandoc.read(raw.text, 'html').blocks
+    
+      --print("====以下是一个表====")
+      for key,value in pairs(htmltable[1].colspecs) do
+        --print(key, value)
+        --print("第" .. key .. "列的系数为")
+        --print(value[2])
+
+        -- temp: set each column width equally
+        value[2] = 1 / #htmltable[1].colspecs
+      end
+      --print("====以上是一个表====")
+
+       -- test: allocate colwidth factors automatically
+      OptimizeColWidth(htmltable[1])
+
+      return htmltable
+    end
+
+    -- process other html-tagged elements here
   else
     return raw
   end
