@@ -91,6 +91,11 @@ function OptimizeColWidth (el)
     if (#value_row.cells == tbl_colnum) then
       for _,value_cell in pairs(value_row.cells) do
         cell_textstr = ""
+
+        -- inline code is fatter than plain text
+        print(value_cell.contents[1].content[1].tag)
+        -- todo: 根据Tag判断是普通文本还是inlinecode，直接计算出宽度值
+
         for _,value_frag in pairs(value_cell.contents[1].content) do
             if (value_frag.text ~= nil) then
               cell_textstr = cell_textstr .. value_frag.text
