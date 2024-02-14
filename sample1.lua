@@ -19,6 +19,25 @@ function Table (el)
   return el
 end
 
+-- helper function
+function DeepCopy(object)
+    local lookup_table = {}
+    local function _copy(object)
+        if type(object) ~= 'table' then
+            return object
+        elseif lookup_table[object] then
+            return lookup_table[object]
+        end 
+        local new_table = {}
+        lookup_table[object] = new_table
+        for k,v in pairs(object) do
+            new_table[_copy(k)] = _copy(v) 
+        end 
+        return setmetatable(new_table, getmetatable(object))
+    end 
+    return _copy(object)                    
+end
+
 function OptimizeColWidth (el)
   function factor_opt(fac)
     local limit = 8
@@ -54,7 +73,11 @@ function OptimizeColWidth (el)
   tbl_strlen = {}
 
   -- merge table header with table body
-  tbl = el.head.rows
+
+  --tbl = el.head.rows -- this is wrong
+  -- must use deep copy so that the original structure of table won't break
+  tbl = DeepCopy(el.head.rows)
+
   for _,value_bodyrows in pairs(el.bodies[1].body) do 
     table.insert(tbl, value_bodyrows)
   end
