@@ -20,6 +20,54 @@ function Table (el)
 end
 
 function OptimizeColWidth (el)
+  --todo: INSERT WIDTH OPTIMIZING FUNCTION HERE
+
+  print("====以下是一个表====")
+
+  tbl_colnum = #el.colspecs
+  tbl_str = {}
+
+  -- merge table header with table body
+  tbl = el.head.rows
+  for _,value_bodyrows in pairs(el.bodies[1].body) do 
+    table.insert(tbl, value_bodyrows)
+  end
+  
+  -- reading table
+  for _,value_row in pairs(tbl) do    
+    --print("-----以下是一行-----")
+    tbl_str_newrow = {}
+
+    -- do not count rows with rowspan attr (except the first row)
+    if (#value_row.cells == tbl_colnum) then
+      for _,value_cell in pairs(value_row.cells) do
+        cell_textstr = ""
+        for _,value_frag in pairs(value_cell.contents[1].content) do
+            if (value_frag.text ~= nil) then
+              cell_textstr = cell_textstr .. value_frag.text
+            else
+              cell_textstr = cell_textstr .. " "
+            end
+        end
+
+        table.insert(tbl_str_newrow, cell_textstr)
+      end
+
+      table.insert(tbl_str, tbl_str_newrow)
+    end
+    --print("-----以上是一行-----")
+  end
+
+  --test
+  for key_x,value_x in pairs(tbl_str) do
+    print("第" .. key_x .. "行")
+    for key_y,value_y in pairs(value_x) do
+      print(key_y,value_y)
+    end
+  end
+
+  print("====以上是一个表====")
+  
   return el
 end
 
@@ -29,7 +77,6 @@ function RawBlock (raw)
     
       -- htmltable_singular is iterator of each html-table
       htmltable = pandoc.read(raw.text, 'html').blocks
-    
       --print("====以下是一个表====")
       for key,value in pairs(htmltable[1].colspecs) do
         --print(key, value)
