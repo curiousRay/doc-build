@@ -20,12 +20,38 @@ function Table (el)
 end
 
 function OptimizeColWidth (el)
-  --todo: INSERT WIDTH OPTIMIZING FUNCTION HERE
+  function factor_opt(fac)
+    local limit = 8
+    need_redo = false
+    min_val = math.min(table.unpack(fac))
+    for key,value in pairs(fac) do
+      if (value / min_val > limit) then
+        need_redo = true
+        value = value * 0.618
+        fac[key] = value
+        need_redo = true
+      end
+    end
+    
+    if (need_redo) then
+      fac = factor_opt(fac)
+    else
+      -- normalize column width
+      sum = 0
+      for key,value in pairs(fac) do
+        sum = sum + value
+      end
+      for key,value in pairs(fac) do
+        fac[key] = fac[key] / sum
+      end
+      return
+    end
+  end
 
   print("====以下是一个表====")
 
   tbl_colnum = #el.colspecs
-  tbl_str = {}
+  tbl_strlen = {}
 
   -- merge table header with table body
   tbl = el.head.rows
@@ -36,7 +62,7 @@ function OptimizeColWidth (el)
   -- reading table
   for _,value_row in pairs(tbl) do    
     --print("-----以下是一行-----")
-    tbl_str_newrow = {}
+    tbl_strlen_newrow = {}
 
     -- do not count rows with rowspan attr (except the first row)
     if (#value_row.cells == tbl_colnum) then
@@ -49,34 +75,52 @@ function OptimizeColWidth (el)
               cell_textstr = cell_textstr .. " "
             end
         end
-
-        table.insert(tbl_str_newrow, cell_textstr)
+        
+        -- store the length of string to `tbl_strlen`
+        table.insert(tbl_strlen_newrow, #cell_textstr)
       end
 
-      table.insert(tbl_str, tbl_str_newrow)
+      table.insert(tbl_strlen, tbl_strlen_newrow)
     end
     --print("-----以上是一行-----")
   end
 
-  --test
-  for key_x,value_x in pairs(tbl_str) do
-    print("第" .. key_x .. "行")
-    for key_y,value_y in pairs(value_x) do
-      print(key_y,value_y)
+  factor = {}
+  for col=1,tbl_colnum do
+    column = {}
+    for k,v in pairs(tbl_strlen) do
+      table.insert(column, tbl_strlen[k][col])
     end
+
+    -- use column's max length as factor
+    factor[col] = math.max(table.unpack(column))
+  end
+  
+  factor_opt(factor)
+
+  --print("优化结果：")
+  for key,value in pairs(factor) do
+    --print("第" .. key .. "列的系数为")
+    --print(value[2])
+    print(key,value)
   end
 
   print("====以上是一个表====")
-  
-  return el
+
+
+
+  return factor
 end
 
 function RawBlock (raw)
   if (raw.format:match 'html') then
     if (pandoc.read(raw.text, 'html').blocks[1].tag == "Table") then
-    
       -- htmltable_singular is iterator of each html-table
       htmltable = pandoc.read(raw.text, 'html').blocks
+
+      -- calculate colwidth factors
+      colfactor_result = OptimizeColWidth(htmltable[1])
+
       --print("====以下是一个表====")
       for key,value in pairs(htmltable[1].colspecs) do
         --print(key, value)
@@ -84,13 +128,11 @@ function RawBlock (raw)
         --print(value[2])
 
         -- temp: set each column width equally
-        value[2] = 1 / #htmltable[1].colspecs
+        --value[2] = 1 / #htmltable[1].colspecs
+        value[2] = colfactor_result[key]
       end
+
       --print("====以上是一个表====")
-
-       -- test: allocate colwidth factors automatically
-      OptimizeColWidth(htmltable[1])
-
       return htmltable
     end
 

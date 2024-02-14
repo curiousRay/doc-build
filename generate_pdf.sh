@@ -5,10 +5,11 @@ set -e
 sudo docker run --rm \
        	--volume "$(pwd):/data" \
        	--user $(id -u):$(id -g) \
-       	nightkeeper:v1 test.md -o test.tex --template eisvogel.tex \
+       	nightkeeper:v1 test.md -o test.pdf --template eisvogel.tex \
         --toc \
         --toc-depth=5 \
        	--listings \
+        --verbose \
         --pdf-engine "xelatex" \
         --lua-filter "./sample1.lua" \
         --from=markdown-markdown_in_html_blocks \
