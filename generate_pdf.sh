@@ -9,7 +9,6 @@ sudo docker run --rm \
         --toc \
         --toc-depth=5 \
        	--listings \
-        --verbose \
         --pdf-engine "xelatex" \
         --lua-filter "./sample1.lua" \
         --from=markdown-markdown_in_html_blocks \

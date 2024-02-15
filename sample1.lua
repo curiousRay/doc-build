@@ -5,20 +5,6 @@ doc_lang , _ = string.gsub(tostring(PANDOC_WRITER_OPTIONS.variables["lang"]), "%
 -- experimental: add background color to inline-code
 show_inlinecode_background = true
 
-function Table (el)
-  --表的长度
-  -- print(#el.colspecs)
-
-  for key,value in pairs(el.colspecs) do
-      --print(key, value)
-      --print("第" .. key .. "列的系数为")
-      --print(value[2])
-      --value[2] = 1 / #el.colspecs
-  end
-  
-  return el
-end
-
 -- helper function
 function DeepCopy(object)
     local lookup_table = {}
@@ -67,7 +53,7 @@ function OptimizeColWidth (el)
     end
   end
 
-  print("====以下是一个表====")
+  --print("====Table Start====")
 
   tbl_colnum = #el.colspecs
   tbl_strlen = {}
@@ -84,45 +70,32 @@ function OptimizeColWidth (el)
   
   -- reading table
   for _,value_row in pairs(tbl) do    
-    --print("-----以下是一行-----")
+    --print("-----Row Start-----")
     tbl_strlen_newrow = {}
 
     -- do not count rows with rowspan attr (except the first row)
     if (#value_row.cells == tbl_colnum) then
       for _,value_cell in pairs(value_row.cells) do
-        cell_textstr = ""
         cell_textstrlen = 0
 
-        -- inline code is fatter than plain text
-        --print(value_cell.contents[1].content[1].tag)
-        -- todo: 根据Tag判断是普通文本还是inlinecode，直接计算出宽度值
-
         for _,value_frag in pairs(value_cell.contents[1].content) do
-            
-            --print(value_frag.tag)
-            if (value_frag.text ~= nil) then
-              --cell_textstr = cell_textstr .. value_frag.text
-            else
-              --cell_textstr = cell_textstr .. " "
-            end
-
             if (value_frag.tag == "Space") then
               cell_textstrlen = cell_textstrlen + 1
             elseif (value_frag.tag == "Code") then
-              -- inline code characters are fatter
+              -- inline code characters are fatter thus scale the width value
               cell_textstrlen = cell_textstrlen + #value_frag.text * 1.343
             else
               cell_textstrlen = cell_textstrlen + #value_frag.text
             end
         end
         
-        -- store the length of string to `tbl_strlen`
+        -- store the length of string finally to `tbl_strlen`
         table.insert(tbl_strlen_newrow, cell_textstrlen)
       end
 
       table.insert(tbl_strlen, tbl_strlen_newrow)
     end
-    --print("-----以上是一行-----")
+    --print("-----Row End-----")
   end
 
   factor = {}
@@ -132,27 +105,25 @@ function OptimizeColWidth (el)
       table.insert(column, tbl_strlen[k][col])
     end
 
-    -- use column's max length as factor
+    -- use column's max content length as column-width factor
     factor[col] = math.max(table.unpack(column))
     
     for key,value in pairs(column) do
-      print(key,value)
+      --print(key,value)
     end
   
   end
   
   factor_opt(factor)
 
-  print("优化结果：")
+  --print("Optimization result:")
   for key,value in pairs(factor) do
-    --print("第" .. key .. "列的系数为")
+    --print("第" .. key .. "列的系数为" .. value)
     --print(value[2])
-    print(key,value)
+    --print(key,value)
   end
 
-  print("====以上是一个表====")
-
-
+  --print("====Table End====")
 
   return factor
 end
@@ -166,22 +137,20 @@ function RawBlock (raw)
       -- calculate colwidth factors
       colfactor_result = OptimizeColWidth(htmltable[1])
 
-      --print("====以下是一个表====")
+      --print("====Table Start====")
       for key,value in pairs(htmltable[1].colspecs) do
-        --print(key, value)
-        --print("第" .. key .. "列的系数为")
-        --print(value[2])
-
-        -- temp: set each column width equally
+        -- set column width evenly
         --value[2] = 1 / #htmltable[1].colspecs
+
+        -- set column width using optimization algorithm
         value[2] = colfactor_result[key]
       end
 
-      --print("====以上是一个表====")
+      --print("====Table End====")
       return htmltable
     end
 
-    -- process other html-tagged elements here
+    -- process other html-tagged elements here if you wish
   else
     return raw
   end
