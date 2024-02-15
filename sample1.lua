@@ -40,7 +40,7 @@ end
 
 function OptimizeColWidth (el)
   function factor_opt(fac)
-    local limit = 8
+    local limit = 6
     need_redo = false
     min_val = math.min(table.unpack(fac))
     for key,value in pairs(fac) do
@@ -91,21 +91,33 @@ function OptimizeColWidth (el)
     if (#value_row.cells == tbl_colnum) then
       for _,value_cell in pairs(value_row.cells) do
         cell_textstr = ""
+        cell_textstrlen = 0
 
         -- inline code is fatter than plain text
-        print(value_cell.contents[1].content[1].tag)
+        --print(value_cell.contents[1].content[1].tag)
         -- todo: 根据Tag判断是普通文本还是inlinecode，直接计算出宽度值
 
         for _,value_frag in pairs(value_cell.contents[1].content) do
+            
+            --print(value_frag.tag)
             if (value_frag.text ~= nil) then
-              cell_textstr = cell_textstr .. value_frag.text
+              --cell_textstr = cell_textstr .. value_frag.text
             else
-              cell_textstr = cell_textstr .. " "
+              --cell_textstr = cell_textstr .. " "
+            end
+
+            if (value_frag.tag == "Space") then
+              cell_textstrlen = cell_textstrlen + 1
+            elseif (value_frag.tag == "Code") then
+              -- inline code characters are fatter
+              cell_textstrlen = cell_textstrlen + #value_frag.text * 1.343
+            else
+              cell_textstrlen = cell_textstrlen + #value_frag.text
             end
         end
         
         -- store the length of string to `tbl_strlen`
-        table.insert(tbl_strlen_newrow, #cell_textstr)
+        table.insert(tbl_strlen_newrow, cell_textstrlen)
       end
 
       table.insert(tbl_strlen, tbl_strlen_newrow)
@@ -122,11 +134,16 @@ function OptimizeColWidth (el)
 
     -- use column's max length as factor
     factor[col] = math.max(table.unpack(column))
+    
+    for key,value in pairs(column) do
+      print(key,value)
+    end
+  
   end
   
   factor_opt(factor)
 
-  --print("优化结果：")
+  print("优化结果：")
   for key,value in pairs(factor) do
     --print("第" .. key .. "列的系数为")
     --print(value[2])
