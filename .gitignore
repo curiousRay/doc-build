@@ -4,3 +4,10 @@
 
 *.md
 !README.md
+
+*.tex
+!eisvogel.tex
+
+media/*
+
+SourceHanSans.ttc
