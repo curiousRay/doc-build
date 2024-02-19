@@ -14,7 +14,7 @@ sudo docker run --rm \
         --from=markdown-markdown_in_html_blocks \
         --number-sections \
         --filter pandoc-latex-environment \
-    -V table-use-row-colors="true" \
+    -V table-use-row-colors \
     -V lang="zh-CN" \
     -V CJKmainfont="Source Han Sans SC" \
 	-V titlepage="true" \
