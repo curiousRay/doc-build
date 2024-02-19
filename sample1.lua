@@ -69,6 +69,7 @@ function OptimizeColWidth (el)
   end
   
   -- reading table
+
   for _,value_row in pairs(tbl) do    
     --print("-----Row Start-----")
     tbl_strlen_newrow = {}
@@ -79,13 +80,22 @@ function OptimizeColWidth (el)
         cell_textstrlen = 0
 
         for _,value_frag in pairs(value_cell.contents[1].content) do
-            if (value_frag.tag == "Space") then
+            if (value_frag.tag == "Str") then
+              cell_textstrlen = cell_textstrlen + #value_frag.text
+            elseif (value_frag.tag == "Space") then
               cell_textstrlen = cell_textstrlen + 1
             elseif (value_frag.tag == "Code") then
               -- inline code characters are fatter thus scale the width value
               cell_textstrlen = cell_textstrlen + #value_frag.text * 1.343
+            elseif (value_frag.tag == "Link") then
+              cell_textstrlen = cell_textstrlen + #value_frag.content[1].text
+            elseif (value_frag.tag == "Strong") then
+              cell_textstrlen = cell_textstrlen + #value_frag.content[1].text
+            elseif (type(value_frag) == "table") then
+              -- `<ul>`,`<li>`elements inside the table cell
+              cell_textstrlen = cell_textstrlen + #pandoc.utils.stringify(value_frag[1])
             else
-              cell_textstrlen = cell_textstrlen + #value_frag.text
+              cell_textstrlen = cell_textstrlen + 0
             end
         end
         
@@ -130,27 +140,25 @@ end
 
 function RawBlock (raw)
   if (raw.format:match 'html') then
-    if (pandoc.read(raw.text, 'html').blocks[1].tag == "Table") then
-      -- htmltable_singular is iterator of each html-table
-      htmltable = pandoc.read(raw.text, 'html').blocks
+    htmlblocks = pandoc.read(raw.text, 'html').blocks
+    for i = 1, #htmlblocks do
+      if (htmlblocks[i] ~= nil and htmlblocks[i].tag == "Table") then
+        -- calculate colwidth factors
+        colfactor_result = OptimizeColWidth(htmlblocks[i])
 
-      -- calculate colwidth factors
-      colfactor_result = OptimizeColWidth(htmltable[1])
-
-      --print("====Table Start====")
-      for key,value in pairs(htmltable[1].colspecs) do
+        for key,value in pairs(htmlblocks[i].colspecs) do
         -- set column width evenly
-        --value[2] = 1 / #htmltable[1].colspecs
+        --value[2] = 1 / #htmlblocks[i].colspecs
 
         -- set column width using optimization algorithm
-        value[2] = colfactor_result[key]
+          value[2] = colfactor_result[key]
+        end
       end
-
-      --print("====Table End====")
-      return htmltable
+      
+      -- process other html-tagged elements here if you wish
     end
+    return htmlblocks
 
-    -- process other html-tagged elements here if you wish
   else
     return raw
   end
