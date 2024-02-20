@@ -5,6 +5,14 @@ doc_lang , _ = string.gsub(tostring(PANDOC_WRITER_OPTIONS.variables["lang"]), "%
 -- experimental: add background color to inline-code
 show_inlinecode_background = false
 
+function Header(el)
+  -- insert linebreak after header level 4 and 5
+  if (el.level == 4 or el.level == 5) then
+    el.content = el.content .. {pandoc.LineBreak()}
+  end
+  return el
+end
+
 -- helper function
 function DeepCopy(object)
     local lookup_table = {}
