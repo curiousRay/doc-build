@@ -713,6 +713,13 @@ $if(tables)$
 \definecolor{table-row-color}{HTML}{F5F5F5}
 \definecolor{table-rule-color}{HTML}{999999}
 
+%% lihao: stretch the longtable to fill the page width
+\setlength\LTleft{0pt}
+\setlength\LTright{0pt}
+\makeatletter
+\patchcmd\LT@array{\tabskip\z@}{\extracolsep{\fill}}{}{}
+\makeatletter
+
 %\arrayrulecolor{black!40}
 \arrayrulecolor{table-rule-color}     % color of \toprule, \midrule, \bottomrule
 \setlength\heavyrulewidth{0.3ex}      % thickness of \toprule, \bottomrule
