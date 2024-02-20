@@ -8,9 +8,10 @@ show_inlinecode_background = false
 function Header(el)
   -- insert linebreak after header level 4 and 5
   if (el.level == 4 or el.level == 5) then
-    el.content = el.content .. {pandoc.LineBreak()}
+    return {el, pandoc.LineBreak()}
+  else
+    return el
   end
-  return el
 end
 
 -- helper function
