@@ -173,6 +173,20 @@ function RawBlock (raw)
   end
 end
 
+function Table(el)
+  --if a Table's first column comes with `ColWidthDefault`, then optimize the column width using algorithm
+  if (el.colspecs[1][2] == nil) then
+    colfactor_result = OptimizeColWidth(el)
+    --print(colfactor_result)
+    for key,value in pairs(el.colspecs) do
+    -- set column width using optimization algorithm
+        value[2] = colfactor_result[key]
+    end
+  end
+
+  return el
+end
+
 function Code(el)
   esc_text, _ = el.text:gsub("\\", "\\\\")
   esc_text, _ = esc_text:gsub("#", "\\#")
