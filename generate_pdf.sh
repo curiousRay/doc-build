@@ -34,4 +34,3 @@ sudo docker run --rm \
     -V geometry:left="1.5cm" \
     -V geometry:right="1.5cm" \
     -V colorlinks="true"
-
