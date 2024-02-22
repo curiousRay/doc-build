@@ -5,6 +5,15 @@ doc_lang , _ = string.gsub(tostring(PANDOC_WRITER_OPTIONS.variables["lang"]), "%
 -- experimental: add background color to inline-code
 show_inlinecode_background = false
 
+function Header(el)
+  -- insert linebreak after header level 4 and 5
+  if (el.level == 4 or el.level == 5) then
+    return {el, pandoc.LineBreak()}
+  else
+    return el
+  end
+end
+
 -- helper function
 function DeepCopy(object)
     local lookup_table = {}
@@ -162,6 +171,20 @@ function RawBlock (raw)
   else
     return raw
   end
+end
+
+function Table(el)
+  --if a Table's first column comes with `ColWidthDefault`, then optimize the column width using algorithm
+  if (el.colspecs[1][2] == nil) then
+    colfactor_result = OptimizeColWidth(el)
+    --print(colfactor_result)
+    for key,value in pairs(el.colspecs) do
+    -- set column width using optimization algorithm
+        value[2] = colfactor_result[key]
+    end
+  end
+
+  return el
 end
 
 function Code(el)
