@@ -285,13 +285,20 @@ function BlockQuote(el)
 
     return false
   end
-
+  
   -- **Note:** or [!NOTE]
-  if ((el.c[1].c[1].t == "Strong") 
-    and (IsGradeKeywordFound(el.c[1].c[1].c[1].text, "quotetype_info")))
-    or (el.c[1].c[1].text == "[!NOTE]")
-    then
-      if (el.c[1].c[1].text == "[!NOTE]") then
+  isAsteriskStyleInfoBlock = (
+	(el.c[1].t == "Para")
+      and (el.c[1].c[1].t == "Strong") 
+        and (IsGradeKeywordFound(el.c[1].c[1].c[1].text, "quotetype_info"))
+  )
+  isGithubStyleInfoBlock = (
+	(el.c[1].t == "Para")
+	  and (el.c[1].c[1].t == "Str")
+        and (el.c[1].c[1].text == "[!NOTE]")
+  )
+  if (isAsteriskStyleRiskBlock or isGithubStyleRiskBlock) then
+      if (isGithubStyleRiskBlock) then
         res = str_info[doc_lang]
         if (res == nil) then
             -- fallback to default
@@ -304,11 +311,18 @@ function BlockQuote(el)
       return el.content
   end
 
-  if ((el.c[1].c[1].t == "Strong") 
-    and (IsGradeKeywordFound(el.c[1].c[1].c[1].text, "quotetype_warning")))
-    or (el.c[1].c[1].text == "[!WARNING]")
-    then
-      if (el.c[1].c[1].text == "[!WARNING]") then
+  isAsteriskStyleWarningBlock = (
+	(el.c[1].t == "Para")
+      and (el.c[1].c[1].t == "Strong") 
+        and (IsGradeKeywordFound(el.c[1].c[1].c[1].text, "quotetype_warning"))
+  )
+  isGithubStyleWarningBlock = (
+	(el.c[1].t == "Para")
+	  and (el.c[1].c[1].t == "Str")
+        and (el.c[1].c[1].text == "[!WARNING]")
+  )
+  if (isAsteriskStyleWarningBlock or isGithubStyleWarningBlock) then
+      if (isGithubStyleWarningBlock) then
         res = str_warning[doc_lang]
         if (res == nil) then
             -- fallback to default
@@ -321,11 +335,19 @@ function BlockQuote(el)
       return el.content
   end
 
-  if ((el.c[1].c[1].t == "Strong") 
-    and (IsGradeKeywordFound(el.c[1].c[1].c[1].text, "quotetype_error")))
-    or (el.c[1].c[1].text == "[!CAUTION]")
-    then
-      if (el.c[1].c[1].text == "[!CAUTION]") then
+  isAsteriskStyleErrorBlock = (
+	(el.c[1].t == "Para")
+      and (el.c[1].c[1].t == "Strong") 
+        and (IsGradeKeywordFound(el.c[1].c[1].c[1].text, "quotetype_error"))
+  )
+  isGithubStyleErrorBlock = (
+	(el.c[1].t == "Para")
+	  and (el.c[1].c[1].t == "Str")
+        and (el.c[1].c[1].text == "[!CAUTION]")
+		-- Github-flavored markdown provides no [!ERROR] block, therefore use [!CAUTION] instead
+  )
+  if (isAsteriskStyleErrorBlock or isGithubStyleErrorBlock) then
+      if (isGithubStyleErrorBlock) then
         res = str_error[doc_lang]
         if (res == nil) then
             -- fallback to default
