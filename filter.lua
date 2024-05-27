@@ -62,7 +62,7 @@ function OptimizeColWidth (el)
     end
   end
 
-  --print("====Table Start====")
+  -- print("====Table Start====")
 
   tbl_colnum = #el.colspecs
   tbl_strlen = {}
@@ -80,7 +80,7 @@ function OptimizeColWidth (el)
   -- reading table
 
   for _,value_row in pairs(tbl) do    
-    --print("-----Row Start-----")
+    -- print("-----Row Start-----")
     tbl_strlen_newrow = {}
 
     -- do not count rows with rowspan attr (except the first row)
@@ -88,25 +88,27 @@ function OptimizeColWidth (el)
       for _,value_cell in pairs(value_row.cells) do
         cell_textstrlen = 0
 
-        for _,value_frag in pairs(value_cell.contents[1].content) do
-            if (value_frag.tag == "Str") then
-              cell_textstrlen = cell_textstrlen + #value_frag.text
-            elseif (value_frag.tag == "Space") then
-              cell_textstrlen = cell_textstrlen + 1
-            elseif (value_frag.tag == "Code") then
-              -- inline code characters are fatter thus scale the width value
-              cell_textstrlen = cell_textstrlen + #value_frag.text * 1.343
-            elseif (value_frag.tag == "Link") then
-              cell_textstrlen = cell_textstrlen + #value_frag.content[1].text
-            elseif (value_frag.tag == "Strong") then
-              cell_textstrlen = cell_textstrlen + #value_frag.content[1].text
-            elseif (type(value_frag) == "table") then
-              -- `<ul>`,`<li>`elements inside the table cell
-              cell_textstrlen = cell_textstrlen + #pandoc.utils.stringify(value_frag[1])
-            else
-              cell_textstrlen = cell_textstrlen + 0
-            end
-        end
+		if (value_cell.contents[1] ~= nil) then		
+			for _,value_frag in pairs(value_cell.contents[1].content) do
+				if (value_frag.tag == "Str") then
+				  cell_textstrlen = cell_textstrlen + #value_frag.text
+				elseif (value_frag.tag == "Space") then
+				  cell_textstrlen = cell_textstrlen + 1
+				elseif (value_frag.tag == "Code") then
+				  -- inline code characters are fatter thus scale the width value
+				  cell_textstrlen = cell_textstrlen + #value_frag.text * 1.343
+				elseif (value_frag.tag == "Link") then
+				  cell_textstrlen = cell_textstrlen + #value_frag.content[1].text
+				elseif (value_frag.tag == "Strong") then
+				  cell_textstrlen = cell_textstrlen + #value_frag.content[1].text
+				elseif (type(value_frag) == "table") then
+				  -- `<ul>`,`<li>`elements inside the table cell
+				  cell_textstrlen = cell_textstrlen + #pandoc.utils.stringify(value_frag[1])
+				else
+				  cell_textstrlen = cell_textstrlen + 0
+				end
+			end
+		end		
         
         -- store the length of string finally to `tbl_strlen`
         table.insert(tbl_strlen_newrow, cell_textstrlen)
