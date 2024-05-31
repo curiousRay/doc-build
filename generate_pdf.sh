@@ -5,16 +5,24 @@ set -e
 sudo docker run --rm \
        	--volume "$(pwd):/data" \
        	--user $(id -u):$(id -g) \
-       	nightkeeper:v1 doc.md -o doc.pdf --template eisvogel.tex \
+       	nightkeeper:v1 doc.md \
+		--lua-filter "./preprocess.lua" \
+        --from=markdown-markdown_in_html_blocks \
+		 > /dev/null
+	
+sudo docker run --rm \
+       	--volume "$(pwd):/data" \
+       	--user $(id -u):$(id -g) \
+       	nightkeeper:v1 doc.md -o doc.tex --template eisvogel.tex \
         --toc \
         --toc-depth=5 \
        	--listings \
         --pdf-engine "xelatex" \
+		--lua-filter "./preprocess.lua" \
         --lua-filter "./filter.lua" \
         --from=markdown-markdown_in_html_blocks \
         --number-sections \
         --filter pandoc-latex-environment \
-		--verbose \
     -V table-use-row-colors \
     -V lang="zh-CN" \
     -V CJKmainfont="Source Han Sans SC" \
