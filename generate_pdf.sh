@@ -13,7 +13,7 @@ sudo docker run --rm \
 sudo docker run --rm \
        	--volume "$(pwd):/data" \
        	--user $(id -u):$(id -g) \
-       	nightkeeper:v1 doc.md -o doc.tex --template eisvogel.tex \
+       	nightkeeper:v1 doc.md -o doc.pdf --template eisvogel.tex \
         --toc \
         --toc-depth=5 \
        	--listings \
