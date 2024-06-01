@@ -5,3 +5,5 @@
 
 *.tex
 !eisvogel.tex
+
+!doc-build-assets/*
