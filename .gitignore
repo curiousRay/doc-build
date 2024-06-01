@@ -1,0 +1,7 @@
+*.pdf
+
+*.md
+!README.md
+
+*.tex
+!eisvogel.tex
