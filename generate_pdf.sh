@@ -6,20 +6,20 @@ sudo docker run --rm \
        	--volume "$(pwd):/data" \
        	--user $(id -u):$(id -g) \
        	nightkeeper:v1 doc.md \
-		--lua-filter "./preprocess.lua" \
+		--lua-filter "doc-build-assets/preprocess.lua" \
         --from=markdown-markdown_in_html_blocks \
 		 > /dev/null
 	
 sudo docker run --rm \
        	--volume "$(pwd):/data" \
        	--user $(id -u):$(id -g) \
-       	nightkeeper:v1 doc.md -o doc.pdf --template eisvogel.tex \
+       	nightkeeper:v1 doc.md -o doc.pdf --template doc-build-assets/eisvogel.tex \
         --toc \
         --toc-depth=5 \
        	--listings \
         --pdf-engine "xelatex" \
-		--lua-filter "./preprocess.lua" \
-        --lua-filter "./filter.lua" \
+		--lua-filter "doc-build-assets/preprocess.lua" \
+        --lua-filter "doc-build-assets/filter.lua" \
         --from=markdown-markdown_in_html_blocks \
         --number-sections \
         --filter pandoc-latex-environment \

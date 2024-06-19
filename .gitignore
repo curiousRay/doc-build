@@ -4,6 +4,5 @@
 !README.md
 
 *.tex
-!eisvogel.tex
 
 !doc-build-assets/*
