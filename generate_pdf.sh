@@ -5,7 +5,7 @@ set -e
 sudo docker run --rm \
        	--volume "$(pwd):/data" \
        	--user $(id -u):$(id -g) \
-       	nightkeeper:v1 doc.md \
+       	nightkeeper/doc-build:latest doc.md \
 		--lua-filter "doc-build-assets/preprocess.lua" \
         --from=markdown-markdown_in_html_blocks \
 		 > /dev/null
@@ -13,7 +13,7 @@ sudo docker run --rm \
 sudo docker run --rm \
        	--volume "$(pwd):/data" \
        	--user $(id -u):$(id -g) \
-       	nightkeeper:v1 doc.md -o doc.pdf --template doc-build-assets/eisvogel.tex \
+       	nightkeeper/doc-build:latest doc.md -o doc.pdf --template doc-build-assets/eisvogel.tex \
         --toc \
         --toc-depth=5 \
        	--listings \
