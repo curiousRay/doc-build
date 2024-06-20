@@ -978,6 +978,37 @@ $endif$
 \definecolor{inlinecode-bgcolor}{HTML}{f7f7f7}
 \definecolor{inlinecode-textcolor}{HTML}{435489}
 
+
+%% lihao: set maximum list depth (default is 4)
+%% unordered list
+\usepackage{enumitem}
+\setlistdepth{9}
+\setlist[itemize,1]{label=•}
+\setlist[itemize,2]{label=–}
+\setlist[itemize,3]{label=*}
+\setlist[itemize,4]{label=·}
+\setlist[itemize,5]{label=·}
+\setlist[itemize,6]{label=·}
+\setlist[itemize,7]{label=·}
+\setlist[itemize,8]{label=·}
+\setlist[itemize,9]{label=·}
+\renewlist{itemize}{itemize}{9}
+
+%% ordered list
+\setlistdepth{9}
+\setlist[enumerate,1]{label=(\arabic*)}
+\setlist[enumerate,2]{label=(\Roman*)}
+\setlist[enumerate,3]{label=(\Alph*)}
+\setlist[enumerate,4]{label=(\roman*)}
+\setlist[enumerate,5]{label=(\alph*)}
+\setlist[enumerate,6]{label=(\arabic*)}
+\setlist[enumerate,7]{label=(\Roman*)}
+\setlist[enumerate,8]{label=(\Alph*)}
+\setlist[enumerate,9]{label=(\roman*)}
+\renewlist{enumerate}{enumerate}{9}
+
+
+
 \begin{document}
 %%
 %% begin titlepage
