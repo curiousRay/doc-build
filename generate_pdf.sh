@@ -2,28 +2,31 @@
 
 set -e
 
+src_docfile_root="doc.md" # change the relative path/name to source docfile (*.md) on your need
+dst_docfile_root="doc.pdf" # change the relative path/name to destination docfile (*.pdf) on your need
+src_resource_root="./" # relative path to the image resource directory
+
 sudo docker run --rm \
        	--volume "$(pwd):/data" \
        	--user $(id -u):$(id -g) \
-       	nightkeeper/doc-build:latest doc.md \
+		nightkeeper/doc-build:latest $src_docfile_root \
 		--lua-filter "doc-build-assets/preprocess.lua" \
-        --from=markdown-markdown_in_html_blocks \
+		--verbose \
+		-V resource-path=$src_resource_root \
 		 > /dev/null
 	
 sudo docker run --rm \
        	--volume "$(pwd):/data" \
        	--user $(id -u):$(id -g) \
-       	nightkeeper/doc-build:latest doc.md -o doc.pdf --template doc-build-assets/eisvogel.tex \
+		nightkeeper/doc-build:latest $src_docfile_root -o $dst_docfile_root --template doc-build-assets/eisvogel.tex \
         --toc \
         --toc-depth=5 \
        	--listings \
         --pdf-engine "xelatex" \
-		--lua-filter "doc-build-assets/preprocess.lua" \
         --lua-filter "doc-build-assets/filter.lua" \
         --from=markdown-markdown_in_html_blocks \
         --number-sections \
         --filter pandoc-latex-environment \
-		--verbose \
     -V table-use-row-colors \
     -V lang="zh-CN" \
     -V CJKmainfont="Source Han Sans SC" \

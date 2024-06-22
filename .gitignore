@@ -1,8 +1,7 @@
 *.pdf
-
+*.tex
 *.md
 !README.md
 
-*.tex
-
 !doc-build-assets/*
+media/
